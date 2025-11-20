@@ -11,6 +11,8 @@ export class EnemyManager {
         this.timeSinceLastSpawn = 0;
 
         this.kills = 0; // compteur d'ennemis tués
+        this.enemySpeedMultiplier = 1;
+
     }
 
     update(dt) {
@@ -18,6 +20,8 @@ export class EnemyManager {
 
         const minInterval = 0.1; // intervalle minimal pour ne pas spammer
         this.spawnInterval -= dt*0.05;
+
+        this.enemySpeedMultiplier += dt * 0.01; // augmente très lentement
 
 
         // Temps écoulé depuis le dernier spawn
@@ -29,7 +33,10 @@ export class EnemyManager {
         }
 
         // Mettre à jour tous les ennemis
-        this.enemies.forEach(enemy => enemy.update(dt));
+        this.enemies.forEach(enemy => {
+            enemy.globalSpeedBoost = this.enemySpeedMultiplier;
+            enemy.update(dt);
+        });
     }
 
     spawnEnemy() {

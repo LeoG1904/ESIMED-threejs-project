@@ -13,15 +13,21 @@ export class Ui{
     addEnemy() {
         this.killsData = { kills: 0 }; // compteur initial
         this.aliveData = { alive: 0 }; // nombre d'ennemis vivants
-        this.enemyFolder = this.GUI.addFolder("Kills");
+        this.speedData = { speed: 0 }; // nombre d'ennemis vivants
+        this.enemyFolder = this.GUI.addFolder("Enemy");
         this.killsField = this.enemyFolder.add(this.killsData, "kills").name("Enemies Killed").listen();
         this.aliveField = this.enemyFolder.add(this.aliveData, "alive").name("Enemies Alive").listen();
+        this.speedBoostField = this.enemyFolder.add(this.speedData, "speed").name("Enemies speed").listen();
+
         this.enemyFolder.open();
     }
     updateKills(count) {
         this.killsData.kills = count;
     }
 
+    updateEnemySpeed(count) {
+        this.speedData.speed = count;
+    }
     updateAliveEnemies(count) {
         this.aliveData.alive = count;
     }

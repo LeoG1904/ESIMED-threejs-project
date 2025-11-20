@@ -60,6 +60,7 @@ export class Application {
         this.UI.updateAliveEnemies(this.enemyManager.enemies.length)
         this.UI.updateLevel(this.player)
         this.UI.updatePlayerStats(this.player)
+        this.UI.updateEnemySpeed(this.enemyManager.enemySpeedMultiplier.toFixed(2))
 
         const now = Date.now();
         const elapsed = (now - this.startTime) / 1000; // en secondes

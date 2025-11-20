@@ -3,7 +3,9 @@ export class Enemy {
     constructor(scene, player, position = new THREE.Vector3()) {
         this.scene = scene;
         this.player = player;
-        this.speed = 3;
+        this.baseSpeed = 2 + Math.random() * 2 // entre 2 et 4
+        this.speed = this.baseSpeed
+        this.globalSpeedBoost = 1
         this.damage = 10; // dégâts infligés au joueur
         this.health = 50;
 
@@ -40,7 +42,7 @@ export class Enemy {
         direction.normalize();
 
         // Déplacement
-        this.mesh.position.add(direction.multiplyScalar(this.speed * dt));
+        this.mesh.position.add(direction.multiplyScalar(this.speed * this.globalSpeedBoost * dt));
 
         // Collision avec le joueur
         this.checkCollision();
