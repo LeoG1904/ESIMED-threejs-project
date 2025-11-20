@@ -10,6 +10,7 @@ export class EnemyManager {
         this.spawnInterval = 2; // en secondes
         this.timeSinceLastSpawn = 0;
 
+        this.kills = 0; // compteur d'ennemis tués
     }
 
     update(dt) {

@@ -147,6 +147,8 @@ export class Player {
                     if (enemy.health <= 0) {
                         this.scene.remove(enemy.mesh);
                         this.enemyManager.enemies.splice(j, 1);
+                        this.enemyManager.kills += 1;             // incrémenter le compteur
+
                     }
                     break; // sortir de la boucle ennemis
                 }

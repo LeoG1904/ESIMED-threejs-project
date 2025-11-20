@@ -10,6 +10,15 @@ export class Ui{
         this.timerField = this.timerFolder.add(this.timerData, "time").name("Time").listen();
         this.timerFolder.open();
     }
+    addKillsCounter() {
+        this.killsData = { kills: 0 }; // compteur initial
+        this.killsFolder = this.GUI.addFolder("Kills");
+        this.killsField = this.killsFolder.add(this.killsData, "kills").name("Enemies Killed").listen();
+        this.killsFolder.open();
+    }
+    updateKills(count) {
+        this.killsData.kills = count;
+    }
 
     addSkyboxUI(files,params,onChange){
         const folder = this.GUI.addFolder("Skybox");
