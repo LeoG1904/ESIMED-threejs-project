@@ -30,13 +30,19 @@ export class Player {
         // EXP / Level
         this.level = 1;
         this.exp = 0;
-        this.expToNextLevel = 50; // exp nécessaire pour passer au niveau suivant
+        this.expToNextLevel = 100; // exp nécessaire pour passer au niveau suivant
 
 
         this.createMesh();
         this.initControls();
     }
 
+    updateExpBar() {
+        const bar = document.getElementById("exp-bar");
+        if (!bar) return;
+        const percent = (this.exp / this.expToNextLevel) * 100;
+        bar.style.width = percent + "%";
+    }
     gainExp(amount) {
         this.exp += amount;
         if (this.exp >= this.expToNextLevel) {
@@ -168,6 +174,7 @@ export class Player {
                         this.scene.remove(enemy.mesh);
                         this.enemyManager.enemies.splice(j, 1);
                         this.enemyManager.kills += 1;             // incrémenter le compteur
+                        this.gainExp(10)
 
                     }
                     break; // sortir de la boucle ennemis
