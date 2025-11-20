@@ -40,6 +40,8 @@ export class Application {
     render() {
         const dt = this.clock.getDelta() // <-- calcul du delta
         this.player.update(dt)
+        this.player.updateHealthBar();  // mettre à jour la barre de vie
+
         this.enemyManager.update(dt);
 
         // Exemple simple : faire suivre la caméra derrière le joueur

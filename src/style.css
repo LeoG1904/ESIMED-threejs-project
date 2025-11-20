@@ -93,3 +93,22 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+#health-container{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 25px;
+  background-color: #555;
+  border: 2px solid #000;
+  z-index: 10;
+}
+#health-bar{
+  width: 100%;
+  height: 100%;
+  background-color: #0f0;
+
+}

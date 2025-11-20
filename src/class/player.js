@@ -21,6 +21,8 @@ export class Player{
         this.gravity = -20;      // gravité
         this.jumpPower = 8;      // puissance du saut
         this.isGrounded = true;  // joueur au sol ?
+        this.maxHealth = 100;
+        this.health = this.maxHealth;
 
         this.createMesh();
         this.initControls();
@@ -91,4 +93,16 @@ export class Player{
             this.isGrounded = true;
         }
     }
+    updateHealthBar() {
+        const bar = document.getElementById("health-bar");
+        if (!bar) return;
+        const percent = (this.health / this.maxHealth) * 100;
+        bar.style.width = percent + "%";
+
+        // Couleur en fonction de la vie
+        if (percent > 50) bar.style.backgroundColor = "#0f0";
+        else if (percent > 20) bar.style.backgroundColor = "#ff0";
+        else bar.style.backgroundColor = "#f00";
+    }
+
 }
