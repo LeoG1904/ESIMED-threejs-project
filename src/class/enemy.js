@@ -1,20 +1,17 @@
 import * as THREE from "three";
-
 export class Enemy {
     constructor(scene, player, position = new THREE.Vector3()) {
         this.scene = scene;
         this.player = player;
-
-        // Vitesse de déplacement
         this.speed = 3;
+        this.damage = 10; // dégâts infligés au joueur
 
-        // Créer le mesh (cube rouge par défaut)
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
         this.mesh = new THREE.Mesh(geometry, material);
 
         this.mesh.position.copy(position);
-        this.mesh.position.y = 0.5; // moitié du cube pour poser sur le sol
+        this.mesh.position.y = 0.5;
 
         this.scene.add(this.mesh);
     }
@@ -27,10 +24,38 @@ export class Enemy {
             this.player.mesh.position,
             this.mesh.position
         );
-        direction.y = 0; // on ne bouge que sur le plan XZ
+        direction.y = 0; // mouvement sur XZ uniquement
         direction.normalize();
 
         // Déplacement
         this.mesh.position.add(direction.multiplyScalar(this.speed * dt));
+
+        // Collision avec le joueur
+        this.checkCollision();
+    }
+
+    checkCollision() {
+        const distance = this.mesh.position.distanceTo(this.player.mesh.position);
+        const collisionDistance = 1; // seuil de collision (taille des cubes)
+
+        if (distance < collisionDistance) {
+            // Appliquer les dégâts et éviter double collision instantanée
+            if (!this.hasHit) {
+                this.player.health -= this.damage;
+                if (this.player.health < 0) this.player.health = 0;
+                this.player.updateHealthBar();
+                this.hasHit = true;
+
+                // On peut repousser légèrement l'ennemi pour éviter plusieurs hits instantanés
+                const pushBack = new THREE.Vector3().subVectors(
+                    this.mesh.position,
+                    this.player.mesh.position
+                ).normalize().multiplyScalar(0.5);
+                this.mesh.position.add(pushBack);
+
+                // Réactiver après un petit délai pour pouvoir infliger à nouveau des dégâts
+                setTimeout(() => (this.hasHit = false), 500); // 0.5s
+            }
+        }
     }
 }
