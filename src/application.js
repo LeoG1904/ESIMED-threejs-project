@@ -15,8 +15,13 @@ export class Application {
         document.body.appendChild(this.renderer.domElement)
 
         this.clock = new THREE.Clock(); // <-- pour le delta
+        this.startTime = Date.now(); // au début de la partie
+
 
         this.initParams()
+
+        this.UI = new Ui()
+        this.UI.addSessionTimer()
 
         this.scene = new Scene()
         // this.scene.addCube()
@@ -39,6 +44,15 @@ export class Application {
     }
 
     render() {
+
+        const now = Date.now();
+        const elapsed = (now - this.startTime) / 1000; // en secondes
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = Math.floor(elapsed % 60);
+
+        this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+
         const dt = this.clock.getDelta() // <-- calcul du delta
         this.player.update(dt)
         this.player.updateHealthBar();  // mettre à jour la barre de vie

@@ -4,6 +4,12 @@ export class Ui{
     constructor() {
         this.GUI = new GUI();
     }
+    addSessionTimer() {
+        this.timerData = { time: "0:00" }; // format mm:ss
+        this.timerFolder = this.GUI.addFolder("Session Timer");
+        this.timerField = this.timerFolder.add(this.timerData, "time").name("Time").listen();
+        this.timerFolder.open();
+    }
 
     addSkyboxUI(files,params,onChange){
         const folder = this.GUI.addFolder("Skybox");

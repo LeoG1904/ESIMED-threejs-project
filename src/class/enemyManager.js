@@ -9,17 +9,21 @@ export class EnemyManager {
 
         this.spawnInterval = 2; // en secondes
         this.timeSinceLastSpawn = 0;
-        this.maxEnemies = 20;   // limite d'ennemis simultanés
+        this.elapsedTime = 0; // temps total écoulé depuis le début de la partie
+
     }
 
     update(dt) {
         if (!dt) return;
 
+        const minInterval = 0.1; // intervalle minimal pour ne pas spammer
+        const intervalDecrease = Math.floor(this.elapsedTime / 10) * 0.1;
+        const currentInterval = Math.max(this.spawnInterval - intervalDecrease, minInterval);
+
         // Temps écoulé depuis le dernier spawn
         this.timeSinceLastSpawn += dt;
 
-        // Spawn si on n’a pas dépassé maxEnemies
-        if (this.timeSinceLastSpawn >= this.spawnInterval && this.enemies.length < this.maxEnemies) {
+        if (this.timeSinceLastSpawn >= currentInterval) {
             this.spawnEnemy();
             this.timeSinceLastSpawn = 0;
         }
