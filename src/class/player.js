@@ -33,7 +33,8 @@ export class Player {
         this.fireRatePerc = 1
         this.timeSinceLastShot = 0
 
-        this.freezeChance = 0; // en %, 0 = aucun effet
+        this.freezeChance = 0;
+        this.deathExplosionChance = 0
 
 
         // EXP / Level
@@ -207,6 +208,10 @@ export class Player {
                         this.enemyManager.kills += 1;             // incrémenter le compteur
                         this.gainExp(10)
 
+                        if (Math.random() * 100 < this.deathExplosionChance) {
+                            this.createExplosion(enemy.mesh.position);
+                        }
+
                     }else{
                         if (Math.random() < this.freezeChance / 100) {
                             enemy.freeze(3); // gel pour 3 secondes
@@ -222,6 +227,36 @@ export class Player {
                 this.projectiles.splice(i, 1);
             }
         }
+    }
+
+    createExplosion(position) {
+        const geometry = new THREE.SphereGeometry(1, 8, 8);
+        const material = new THREE.MeshBasicMaterial({ color: 0xff5500 });
+        const explosion = new THREE.Mesh(geometry, material);
+        explosion.position.copy(position);
+        this.scene.add(explosion);
+
+        // dégâts aux ennemis proches
+        for (let i = this.enemyManager.enemies.length - 1; i >= 0; i--) {
+            const enemy = this.enemyManager.enemies[i];
+            if (enemy.mesh.position.distanceTo(position) < 3) {
+                enemy.health -= 20;
+                if (enemy.health <= 0) {
+                    this.scene.remove(enemy.mesh);
+                    this.enemyManager.enemies.splice(i, 1);
+                    this.enemyManager.kills += 1;
+                    this.gainExp(10);
+
+                    if (Math.random() * 100 < this.deathExplosionChance) {
+                        this.createExplosion(enemy.mesh.position);
+                    }
+                }
+            }
+        }
+
+
+        // disparition rapide
+        setTimeout(() => this.scene.remove(explosion), 300);
     }
 
 

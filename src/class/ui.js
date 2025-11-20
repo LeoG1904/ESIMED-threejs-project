@@ -82,7 +82,7 @@ export class Ui{
             .listen();
 
         this.playerFolder.add(this.playerStats, "projectileDamagePerc")
-            .name("Damage x")
+            .name("Damage per bullet")
             .listen();
 
         this.playerFolder.add(this.playerStats, "speedPerc")

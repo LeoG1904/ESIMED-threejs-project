@@ -27,6 +27,13 @@ export const UPGRADES = [
         apply: (player) => {
             player.projectilesPerShot += 1;
         }
+    },
+    {
+        name: "Death Explosion +10%",
+        description: "Chance qu'un ennemi explose à sa mort",
+        apply: (player) => {
+            player.deathExplosionChance += 10; // augmente de 10% chaque fois
+        }
     }
 
 ];
