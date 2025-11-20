@@ -22,7 +22,8 @@ export class Application {
 
         this.UI = new Ui()
         this.UI.addSessionTimer()
-        this.UI.addKillsCounter();
+        this.UI.addKillsCounter()
+        this.UI.addAliveEnemiesCounter()
 
         this.scene = new Scene()
         // this.scene.addCube()
@@ -47,6 +48,7 @@ export class Application {
     render() {
 
         this.UI.updateKills(this.enemyManager.kills)
+        this.UI.updateAliveEnemies(this.enemyManager.enemies.length)
 
         const now = Date.now();
         const elapsed = (now - this.startTime) / 1000; // en secondes

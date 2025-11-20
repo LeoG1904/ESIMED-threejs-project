@@ -7,12 +7,23 @@ export class Enemy {
         this.damage = 10; // dégâts infligés au joueur
         this.health = 50;
 
+        // Variation de taille aléatoire (0.8 à 1.2 fois la taille standard)
+        const scale = 0.8 + Math.random() * 0.4;
+
+        // Variation de couleur rouge-orange légèrement aléatoire
+        const r = 1.0; // rouge fixe
+        const g = Math.random() * 0.5; // vert aléatoire 0-0.5
+        const b = 0; // bleu fixe
+        const color = new THREE.Color(r, g, b);
+
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+        const material = new THREE.MeshStandardMaterial({ color });
         this.mesh = new THREE.Mesh(geometry, material);
 
+        this.mesh.scale.set(scale, scale, scale);
+
         this.mesh.position.copy(position);
-        this.mesh.position.y = 0.5;
+        this.mesh.position.y = 0.5 * scale; // ajuster pour que ça touche le sol
 
         this.scene.add(this.mesh);
     }

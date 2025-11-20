@@ -19,6 +19,17 @@ export class Ui{
     updateKills(count) {
         this.killsData.kills = count;
     }
+    addAliveEnemiesCounter() {
+        this.aliveData = { alive: 0 }; // nombre d'ennemis vivants
+        this.aliveFolder = this.GUI.addFolder("Alive Enemies");
+        this.aliveField = this.aliveFolder.add(this.aliveData, "alive").name("Enemies Alive").listen();
+        this.aliveFolder.open();
+    }
+
+// Pour mettre à jour le compteur
+    updateAliveEnemies(count) {
+        this.aliveData.alive = count;
+    }
 
     addSkyboxUI(files,params,onChange){
         const folder = this.GUI.addFolder("Skybox");
