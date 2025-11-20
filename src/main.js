@@ -1,5 +1,5 @@
 import './style.css';
 
-import { Application } from "./application"
+import { Application } from "./application.js"
 
 new Application()
