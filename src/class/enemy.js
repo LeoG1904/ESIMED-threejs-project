@@ -17,6 +17,7 @@ export class Enemy {
         const g = Math.random() * 0.5; // vert aléatoire 0-0.5
         const b = 0; // bleu fixe
         const color = new THREE.Color(r, g, b);
+        this.originalColor = color
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ color });
@@ -72,4 +73,23 @@ export class Enemy {
             }
         }
     }
+
+    freeze(duration) {
+        if (this.isFrozen) return; // ne pas cumuler
+        this.isFrozen = true;
+        this.savedSpeed = this.speed;
+        this.speed = 0;
+
+        // Changer la couleur pour indiquer le gel
+        this.mesh.material.color.set(0x00ffff);
+
+        // Remettre la vitesse et la couleur originale après duration secondes
+        setTimeout(() => {
+            this.speed = this.savedSpeed;
+            this.mesh.material.color.copy(this.originalColor);
+            this.isFrozen = false;
+        }, duration * 1000);
+    }
+
+
 }

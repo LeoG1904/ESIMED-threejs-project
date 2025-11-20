@@ -18,5 +18,8 @@ export const UPGRADES = [
     {
         name: "Move Speed +15%",
         apply: (player) => player.speedPerc += 0.15
-    }
+    },
+    { name: "Freeze Chance +5%", apply: (player) => player.freezeChance += 5
+    } // +5% chance
+
 ];

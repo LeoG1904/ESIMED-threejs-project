@@ -32,6 +32,9 @@ export class Player {
         this.fireRatePerc = 1
         this.timeSinceLastShot = 0
 
+        this.freezeChance = 0; // en %, 0 = aucun effet
+
+
         // EXP / Level
         this.level = 1;
         this.exp = 0;
@@ -196,6 +199,10 @@ export class Player {
                         this.enemyManager.kills += 1;             // incrémenter le compteur
                         this.gainExp(10)
 
+                    }else{
+                        if (Math.random() < this.freezeChance / 100) {
+                            enemy.freeze(3); // gel pour 3 secondes
+                        }
                     }
                     break; // sortir de la boucle ennemis
                 }
