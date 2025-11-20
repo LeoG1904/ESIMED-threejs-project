@@ -72,7 +72,8 @@ export class Ui{
             projectileDamagePerc: player.projectileDamagePerc,
             speedPerc: player.speedPerc,
             fireRatePerc: player.fireRatePerc,
-            freezeChance: player.freezeChance
+            freezeChance: player.freezeChance,
+            deathExplosionChance: player.deathExplosionChance
         };
 
         this.playerFolder = this.GUI.addFolder("Player Stats");
@@ -97,14 +98,19 @@ export class Ui{
             .name("Freeze chance")
             .listen();
 
+        this.playerFolder.add(this.playerStats, "deathExplosionChance")
+            .name("Explosion chance")
+            .listen();
+
         this.playerFolder.open();
     }
     updatePlayerStats(player) {
         this.playerStats.maxHealth = player.maxHealth;
-        this.playerStats.projectileDamagePerc = Number(player.projectileDamagePerc.toFixed(2) / player.projectilesPerShot);
+        this.playerStats.projectileDamagePerc = Number((player.projectileDamagePerc / player.projectilesPerShot).toFixed(2) );
         this.playerStats.speedPerc = Number(player.speedPerc.toFixed(2));
         this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
         this.playerStats.freezeChance = Number(player.freezeChance.toFixed(2));
+        this.playerStats.deathExplosionChance = Number(player.deathExplosionChance.toFixed(2))
     }
 
 

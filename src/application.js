@@ -24,7 +24,6 @@ export class Application {
         this.clock = new THREE.Clock(); // <-- pour le delta
         this.startTime = Date.now(); // au début de la partie
 
-
         this.initParams()
 
         this.UI = new Ui()
@@ -55,6 +54,10 @@ export class Application {
     }
 
     render() {
+        if (this.player.isPaused){
+            const dt = this.clock.getDelta() // <-- calcul du delta
+            return
+        }
 
         this.UI.updateKills(this.enemyManager.kills)
         this.UI.updateAliveEnemies(this.enemyManager.enemies.length)
@@ -67,7 +70,7 @@ export class Application {
         const minutes = Math.floor(elapsed / 60);
         const seconds = Math.floor(elapsed % 60);
 
-        if (deathScreen.style.display != "flex"){
+        if (deathScreen.style.display !== "flex"){
             this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
         }

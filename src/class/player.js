@@ -4,6 +4,7 @@ import {UPGRADES} from "./upgrade.js"
 export class Player {
 
     constructor(scene, enemyManager,ui) {
+        this.isPaused = false
         this.scene = scene
         this.enemyManager = enemyManager
         this.ui = ui
@@ -62,9 +63,10 @@ export class Player {
     }
 
     levelUp() {
+        this.isPaused = true;
         this.level++;
         this.exp -= this.expToNextLevel;
-        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.1); // croissance exp
+        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.05); // croissance exp
 
         // Prendre 3 upgrades au hasard
         const choices = [...UPGRADES]
@@ -74,6 +76,7 @@ export class Player {
         // Demander à l’UI d’afficher le popup
         this.ui.showUpgradesPopup(choices, (upgrade) => {
             upgrade.apply(this);   // appliquer l'amélioration
+            this.isPaused = false
         });
     }
     createMesh() {
