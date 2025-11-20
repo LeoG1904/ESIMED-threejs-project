@@ -22,8 +22,7 @@ export class Application {
 
         this.UI = new Ui()
         this.UI.addSessionTimer()
-        this.UI.addKillsCounter()
-        this.UI.addAliveEnemiesCounter()
+        this.UI.addEnemy()
 
         this.scene = new Scene()
         // this.scene.addCube()

@@ -10,20 +10,16 @@ export class Ui{
         this.timerField = this.timerFolder.add(this.timerData, "time").name("Time").listen();
         this.timerFolder.open();
     }
-    addKillsCounter() {
+    addEnemy() {
         this.killsData = { kills: 0 }; // compteur initial
-        this.killsFolder = this.GUI.addFolder("Kills");
-        this.killsField = this.killsFolder.add(this.killsData, "kills").name("Enemies Killed").listen();
-        this.killsFolder.open();
+        this.aliveData = { alive: 0 }; // nombre d'ennemis vivants
+        this.enemyFolder = this.GUI.addFolder("Kills");
+        this.killsField = this.enemyFolder.add(this.killsData, "kills").name("Enemies Killed").listen();
+        this.aliveField = this.enemyFolder.add(this.aliveData, "alive").name("Enemies Alive").listen();
+        this.enemyFolder.open();
     }
     updateKills(count) {
         this.killsData.kills = count;
-    }
-    addAliveEnemiesCounter() {
-        this.aliveData = { alive: 0 }; // nombre d'ennemis vivants
-        this.aliveFolder = this.GUI.addFolder("Alive Enemies");
-        this.aliveField = this.aliveFolder.add(this.aliveData, "alive").name("Enemies Alive").listen();
-        this.aliveFolder.open();
     }
 
 // Pour mettre à jour le compteur
