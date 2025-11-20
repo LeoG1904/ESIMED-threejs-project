@@ -3,6 +3,8 @@ import {Scene} from "./class/scene.js";
 import {Camera} from "./class/camera.js";
 import {Ui} from "./class/ui.js";
 import {Player} from "./class/player.js";
+import {Enemy} from "./class/enemy.js";
+import {EnemyManager} from "./class/enemyManager.js";
 
 export class Application {
     
@@ -26,6 +28,9 @@ export class Application {
 
         this.player = new Player(this.scene.scene)
 
+        this.enemyManager = new EnemyManager(this.scene.scene, this.player);
+
+
         this.camera = new Camera()
         this.camera.setOrbitControls(this.renderer.domElement)
 
@@ -35,6 +40,7 @@ export class Application {
     render() {
         const dt = this.clock.getDelta() // <-- calcul du delta
         this.player.update(dt)
+        this.enemyManager.update(dt);
 
         // Exemple simple : faire suivre la caméra derrière le joueur
         this.camera.camera.position.lerp(

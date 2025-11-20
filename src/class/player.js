@@ -28,7 +28,10 @@ export class Player{
 
     createMesh() {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc });
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x00ffcc,
+            flatShading : true
+        });
 
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(0, 0.5, 0); // 0.5 pour que le cube repose sur le sol
@@ -87,5 +90,5 @@ export class Player{
             this.velocityY = 0;
             this.isGrounded = true;
         }
-    }   
+    }
 }
