@@ -6,6 +6,8 @@ import {Player} from "./class/player.js";
 import {Enemy} from "./class/enemy.js";
 import {EnemyManager} from "./class/enemyManager.js";
 
+const deathScreen = document.getElementById("death-screen")
+
 export class Application {
     
     constructor() {
@@ -13,6 +15,11 @@ export class Application {
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.renderer.shadowMap.enabled = true
         document.body.appendChild(this.renderer.domElement)
+
+        document.getElementById("restart-btn").addEventListener("click", () => {
+            location.reload();
+        });
+
 
         this.clock = new THREE.Clock(); // <-- pour le delta
         this.startTime = Date.now(); // au début de la partie
@@ -59,7 +66,10 @@ export class Application {
         const minutes = Math.floor(elapsed / 60);
         const seconds = Math.floor(elapsed % 60);
 
-        this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (deathScreen.style.display != "flex"){
+            this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        }
 
 
         const dt = this.clock.getDelta() // <-- calcul du delta

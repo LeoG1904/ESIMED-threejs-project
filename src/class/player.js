@@ -136,6 +136,12 @@ export class Player {
 
         // Mettre à jour la barre de vie
         this.updateHealthBar();
+        if (this.health <= 0) {
+            this.health = 0;
+            this.updateHealthBar();
+            this.die();
+        }
+
     }
 
     shootAtClosestEnemy() {
@@ -214,4 +220,20 @@ export class Player {
         else if (percent > 20) bar.style.backgroundColor = "#ff0";
         else bar.style.backgroundColor = "#f00";
     }
+    die() {
+        const screen = document.getElementById("death-screen")
+        const killsLabel = document.getElementById("death-kills")
+        const timeLabel = document.getElementById("death-time")
+
+        // Affiche les infos
+        killsLabel.textContent = `Enemies killed: ${this.ui.killsData.kills}`
+        timeLabel.textContent = `Survived: ${this.ui.timerData.time}`
+
+        screen.style.display = "flex";
+
+        // Freeze le joueur
+        this.speed = 0
+        this.fireRate = 99999
+    }
+
 }
