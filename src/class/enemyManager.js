@@ -9,7 +9,6 @@ export class EnemyManager {
 
         this.spawnInterval = 2; // en secondes
         this.timeSinceLastSpawn = 0;
-        this.elapsedTime = 0; // temps total écoulé depuis le début de la partie
 
     }
 
@@ -17,13 +16,13 @@ export class EnemyManager {
         if (!dt) return;
 
         const minInterval = 0.1; // intervalle minimal pour ne pas spammer
-        const intervalDecrease = Math.floor(this.elapsedTime / 10) * 0.1;
-        const currentInterval = Math.max(this.spawnInterval - intervalDecrease, minInterval);
+        this.spawnInterval -= dt*0.05;
+
 
         // Temps écoulé depuis le dernier spawn
         this.timeSinceLastSpawn += dt;
 
-        if (this.timeSinceLastSpawn >= currentInterval) {
+        if (this.timeSinceLastSpawn >= Math.max(this.spawnInterval , minInterval)) {
             this.spawnEnemy();
             this.timeSinceLastSpawn = 0;
         }
