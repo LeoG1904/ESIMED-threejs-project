@@ -5,6 +5,7 @@ export class Enemy {
         this.player = player;
         this.speed = 3;
         this.damage = 10; // dégâts infligés au joueur
+        this.health = 50;
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });

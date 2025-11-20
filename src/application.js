@@ -26,9 +26,10 @@ export class Application {
         this.scene.addGround(this.groundParams.texture,this.groundParams.repeats)
         this.scene.addSkybox(this.skyParams.file)
 
-        this.player = new Player(this.scene.scene)
 
-        this.enemyManager = new EnemyManager(this.scene.scene, this.player);
+        this.enemyManager = new EnemyManager(this.scene.scene, null); // temporairement null pour player
+        this.player = new Player(this.scene.scene, this.enemyManager);
+        this.enemyManager.player = this.player;
 
 
         this.camera = new Camera()
