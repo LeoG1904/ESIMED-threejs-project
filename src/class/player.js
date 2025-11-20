@@ -25,6 +25,7 @@ export class Player {
 
         // Projectiles
         this.projectiles = []
+        this.projectilesPerShot = 1
         this.projectileSpeed = 20
         this.projectileDamage = 25
         this.projectileDamagePerc = 1
@@ -163,16 +164,23 @@ export class Player {
 
         if (!closest) return;
 
-        const geometry = new THREE.SphereGeometry(0.2, 8, 8);
-        const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-        const projectile = new THREE.Mesh(geometry, material);
-        projectile.position.copy(this.mesh.position);
+        for (let i = 0; i < this.projectilesPerShot; i++) {
+            const geometry = new THREE.SphereGeometry(0.2, 8, 8);
+            const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
+            const projectile = new THREE.Mesh(geometry, material);
 
-        const direction = new THREE.Vector3().subVectors(closest.mesh.position, this.mesh.position).normalize();
-        projectile.userData.direction = direction;
+            projectile.position.copy(this.mesh.position);
 
-        this.scene.add(projectile);
-        this.projectiles.push(projectile);
+            // Légère variation d'angle pour les projectiles multiples
+            const spreadAngle = (i - (this.projectilesPerShot - 1) / 2) * 0.1; // ±0.1 rad
+            const direction = new THREE.Vector3().subVectors(closest.mesh.position, this.mesh.position).normalize();
+            direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), spreadAngle);
+
+            projectile.userData.direction = direction;
+
+            this.scene.add(projectile);
+            this.projectiles.push(projectile);
+        }
     }
 
     updateProjectiles(dt) {
@@ -186,7 +194,7 @@ export class Player {
                 const enemy = this.enemyManager.enemies[j];
                 if (p.position.distanceTo(enemy.mesh.position) < 0.7) { // 0.7 = seuil de collision
                     // Infliger dégâts
-                    enemy.health -= this.projectileDamage * this.projectileDamagePerc;
+                    enemy.health -= ( this.projectileDamage * this.projectileDamagePerc ) / this.projectilesPerShot ;
 
                     // Supprimer le projectile
                     this.scene.remove(p);

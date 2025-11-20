@@ -101,7 +101,7 @@ export class Ui{
     }
     updatePlayerStats(player) {
         this.playerStats.maxHealth = player.maxHealth;
-        this.playerStats.projectileDamagePerc = Number(player.projectileDamagePerc.toFixed(2));
+        this.playerStats.projectileDamagePerc = Number(player.projectileDamagePerc.toFixed(2) / player.projectilesPerShot);
         this.playerStats.speedPerc = Number(player.speedPerc.toFixed(2));
         this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
         this.playerStats.freezeChance = Number(player.freezeChance.toFixed(2));

@@ -20,6 +20,13 @@ export const UPGRADES = [
         apply: (player) => player.speedPerc += 0.15
     },
     { name: "Freeze Chance +5%", apply: (player) => player.freezeChance += 5
-    } // +5% chance
+    }, // +5% chance
+
+    {name: "Multi-shot +1",
+        description: "Tire plusieurs projectiles en même temps",
+        apply: (player) => {
+            player.projectilesPerShot += 1;
+        }
+    }
 
 ];
