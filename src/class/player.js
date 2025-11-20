@@ -1,61 +1,75 @@
-import * as THREE from "three";
+import * as THREE from "three"
+import {UPGRADES} from "./upgrade.js"
 
 export class Player {
 
-    constructor(scene, enemyManager) {
-        this.scene = scene;
-        this.enemyManager = enemyManager;
+    constructor(scene, enemyManager,ui) {
+        this.scene = scene
+        this.enemyManager = enemyManager
+        this.ui = ui
 
         // Mouvement
-        this.speed = 6;
-        this.direction = { forward: false, backward: false, left: false, right: false };
+        this.speed = 6
+        this.speedPerc = 1
+        this.direction = { forward: false, backward: false, left: false, right: false }
 
         // Saut & gravité
-        this.velocityY = 0;
-        this.gravity = -20;
-        this.jumpPower = 8;
-        this.isGrounded = true;
+        this.velocityY = 0
+        this.gravity = -20
+        this.jumpPower = 8
+        this.isGrounded = true
 
         // Vie
-        this.maxHealth = 100;
-        this.health = this.maxHealth;
+        this.maxHealth = 100
+        this.health = this.maxHealth
 
         // Projectiles
-        this.projectiles = [];
-        this.projectileSpeed = 20;
-        this.projectileDamage = 25;
-        this.fireRate = 0.5; // tirer toutes les 0.5s
-        this.timeSinceLastShot = 0;
+        this.projectiles = []
+        this.projectileSpeed = 20
+        this.projectileDamage = 25
+        this.projectileDamagePerc = 1
+        this.fireRate = 0.5
+        this.fireRatePerc = 1
+        this.timeSinceLastShot = 0
 
         // EXP / Level
         this.level = 1;
         this.exp = 0;
-        this.expToNextLevel = 100; // exp nécessaire pour passer au niveau suivant
+        this.expToNextLevel = 50   // exp nécessaire pour passer au niveau suivant
 
 
-        this.createMesh();
-        this.initControls();
+        this.createMesh()
+        this.initControls()
     }
 
     updateExpBar() {
-        const bar = document.getElementById("exp-bar");
-        if (!bar) return;
-        const percent = (this.exp / this.expToNextLevel) * 100;
-        bar.style.width = percent + "%";
+        const bar = document.getElementById("exp-bar")
+        if (!bar) return
+        const percent = (this.exp / this.expToNextLevel) * 100
+        bar.style.width = percent + "%"
     }
     gainExp(amount) {
-        this.exp += amount;
+        this.exp += amount
         if (this.exp >= this.expToNextLevel) {
-            this.levelUp();
+            this.levelUp()
         }
-        this.updateExpBar();
+        this.updateExpBar()
     }
 
     levelUp() {
         this.level++;
         this.exp -= this.expToNextLevel;
-        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.5); // croissance exp
-        console.log(`Level up! Nouveau niveau: ${this.level}`);
+        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.1); // croissance exp
+
+        // Prendre 3 upgrades au hasard
+        const choices = [...UPGRADES]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3);
+
+        // Demander à l’UI d’afficher le popup
+        this.ui.showUpgradesPopup(choices, (upgrade) => {
+            upgrade.apply(this);   // appliquer l'amélioration
+        });
     }
     createMesh() {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -92,7 +106,7 @@ export class Player {
     update(dt) {
         if (!dt) return;
 
-        const move = this.speed * dt;
+        const move = this.speed * dt * this.speedPerc;
 
         // Déplacement horizontal
         if (this.direction.forward) this.mesh.position.z -= move;
@@ -112,7 +126,7 @@ export class Player {
 
         // Tir automatique
         this.timeSinceLastShot += dt;
-        if (this.timeSinceLastShot >= this.fireRate) {
+        if (this.timeSinceLastShot >= this.fireRate / this.fireRatePerc) {
             this.shootAtClosestEnemy();
             this.timeSinceLastShot = 0;
         }
@@ -163,7 +177,7 @@ export class Player {
                 const enemy = this.enemyManager.enemies[j];
                 if (p.position.distanceTo(enemy.mesh.position) < 0.7) { // 0.7 = seuil de collision
                     // Infliger dégâts
-                    enemy.health -= this.projectileDamage;
+                    enemy.health -= this.projectileDamage * this.projectileDamagePerc;
 
                     // Supprimer le projectile
                     this.scene.remove(p);

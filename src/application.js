@@ -34,11 +34,12 @@ export class Application {
 
 
         this.enemyManager = new EnemyManager(this.scene.scene, null); // temporairement null pour player
-        this.player = new Player(this.scene.scene, this.enemyManager);
+        this.player = new Player(this.scene.scene, this.enemyManager,this.UI);
         this.enemyManager.player = this.player;
 
 
         this.UI.addLevel(this.player)
+        this.UI.addPlayerStats(this.player)
 
         this.camera = new Camera()
         this.camera.setOrbitControls(this.renderer.domElement)
@@ -51,6 +52,7 @@ export class Application {
         this.UI.updateKills(this.enemyManager.kills)
         this.UI.updateAliveEnemies(this.enemyManager.enemies.length)
         this.UI.updateLevel(this.player)
+        this.UI.updatePlayerStats(this.player)
 
         const now = Date.now();
         const elapsed = (now - this.startTime) / 1000; // en secondes

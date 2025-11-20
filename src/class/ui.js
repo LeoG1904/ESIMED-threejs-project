@@ -37,4 +37,63 @@ export class Ui{
         this.levelData.level = player.level;
     }
 
+    showUpgradesPopup(upgrades, onSelect) {
+        const popup = document.getElementById("upgrade-popup");
+        const container = document.getElementById("upgrade-buttons");
+
+        container.innerHTML = "";
+
+        upgrades.forEach(up => {
+            const btn = document.createElement("button");
+            btn.textContent = up.name;
+            btn.style.padding = "15px";
+            btn.style.fontSize = "18px";
+
+            btn.onclick = () => {
+                popup.style.display = "none";
+                onSelect(up);
+            };
+
+            container.appendChild(btn);
+        });
+
+        popup.style.display = "flex";
+    }
+
+    addPlayerStats(player) {
+        this.playerStats = {
+            maxHealth: player.maxHealth,
+            projectileDamagePerc: player.projectileDamagePerc,
+            speedPerc: player.speedPerc,
+            fireRatePerc: player.fireRatePerc
+        };
+
+        this.playerFolder = this.GUI.addFolder("Player Stats");
+
+        this.playerFolder.add(this.playerStats, "maxHealth")
+            .name("Max Health")
+            .listen();
+
+        this.playerFolder.add(this.playerStats, "projectileDamagePerc")
+            .name("Damage x")
+            .listen();
+
+        this.playerFolder.add(this.playerStats, "speedPerc")
+            .name("Move Speed")
+            .listen();
+
+        this.playerFolder.add(this.playerStats, "fireRatePerc")
+            .name("Fire Rate")
+            .listen();
+
+        this.playerFolder.open();
+    }
+    updatePlayerStats(player) {
+        this.playerStats.maxHealth = player.maxHealth;
+        this.playerStats.projectileDamagePerc = Number(player.projectileDamagePerc.toFixed(2));
+        this.playerStats.speedPerc = Number(player.speedPerc.toFixed(2));
+        this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
+    }
+
+
 }
