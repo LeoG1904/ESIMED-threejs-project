@@ -27,10 +27,30 @@ export class Player {
         this.fireRate = 0.5; // tirer toutes les 0.5s
         this.timeSinceLastShot = 0;
 
+        // EXP / Level
+        this.level = 1;
+        this.exp = 0;
+        this.expToNextLevel = 50; // exp nécessaire pour passer au niveau suivant
+
+
         this.createMesh();
         this.initControls();
     }
 
+    gainExp(amount) {
+        this.exp += amount;
+        if (this.exp >= this.expToNextLevel) {
+            this.levelUp();
+        }
+        this.updateExpBar();
+    }
+
+    levelUp() {
+        this.level++;
+        this.exp -= this.expToNextLevel;
+        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.5); // croissance exp
+        console.log(`Level up! Nouveau niveau: ${this.level}`);
+    }
     createMesh() {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshPhongMaterial({ color: 0x00ffcc, flatShading: true });
