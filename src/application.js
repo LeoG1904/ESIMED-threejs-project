@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu'
 import {Scene} from "./class/scene.js";
 import {Camera} from "./class/camera.js";
 import {Ui} from "./class/ui.js";
+import {Player} from "./class/player.js";
 
 export class Application {
     
@@ -11,15 +12,19 @@ export class Application {
         this.renderer.shadowMap.enabled = true
         document.body.appendChild(this.renderer.domElement)
 
+        this.clock = new THREE.Clock(); // <-- pour le delta
+
         this.initParams()
 
         this.scene = new Scene()
-        //this.scene.addCube()
-        this.scene.loadScene('/scenes/scene_1.json')
+        // this.scene.addCube()
+        // this.scene.loadScene('/scenes/scene_1.json')
         this.scene.addAmbiantLight()
         this.scene.addDirectionalLight()
         this.scene.addGround(this.groundParams.texture,this.groundParams.repeats)
         this.scene.addSkybox(this.skyParams.file)
+
+        this.player = new Player(this.scene.scene)
 
         this.camera = new Camera()
         this.camera.setOrbitControls(this.renderer.domElement)
@@ -28,6 +33,21 @@ export class Application {
     }
 
     render() {
+        const dt = this.clock.getDelta() // <-- calcul du delta
+        this.player.update(dt)
+
+        // Exemple simple : faire suivre la caméra derrière le joueur
+        this.camera.camera.position.lerp(
+            new THREE.Vector3(
+                this.player.mesh.position.x,
+                this.player.mesh.position.y + 10,
+                this.player.mesh.position.z + 15
+            ),
+            0.1
+        )
+        this.camera.camera.lookAt(this.player.mesh.position)
+
+
         this.renderer.render(this.scene.scene, this.camera.camera)
     }
 

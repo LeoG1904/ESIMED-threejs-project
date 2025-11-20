@@ -47,8 +47,8 @@ export class Scene{
 
         this.scene.add(this.sun)
 
-        const sunHelper = new THREE.DirectionalLightHelper(this.sun, 5)
-        this.scene.add(sunHelper)
+        /*const sunHelper = new THREE.DirectionalLightHelper(this.sun, 5)
+        this.scene.add(sunHelper)*/
     }
 
     changeSun(params) {
