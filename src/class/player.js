@@ -250,9 +250,6 @@ export class Player {
                     this.enemyManager.kills += 1;
                     this.gainExp(10);
 
-                    if (Math.random() * 100 < this.deathExplosionChance) {
-                        this.createExplosion(enemy.mesh.position);
-                    }
                 }
             }
         }
