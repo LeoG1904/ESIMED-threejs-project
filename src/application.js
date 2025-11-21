@@ -51,6 +51,7 @@ export class Application {
 
         this.enemyManager = new EnemyManager(this.scene.scene, null); // temporairement null pour player
         this.player = new Player(this.scene.scene, this.enemyManager,this.UI);
+        this.player.isDead = false
         this.enemyManager.player = this.player;
 
 

@@ -1,10 +1,11 @@
 import * as THREE from "three"
 import {getRandomRarity, RARITIES, UPGRADES} from "./upgrade.js"
+import {addScore} from "./leaderBoard.js";
 
 export class Player {
 
     constructor(scene, enemyManager,ui) {
-
+        this.isDead = false
         this.isPaused = false
         this.isLevelUp = false
 
@@ -135,7 +136,6 @@ export class Player {
 
     update(dt) {
         if (!dt) return;
-
         const move = this.speed * dt * this.speedPerc;
 
         // Déplacement horizontal
@@ -168,7 +168,7 @@ export class Player {
 
         // Mettre à jour la barre de vie
         this.updateHealthBar();
-        if (this.health <= 0) {
+        if (this.health <= 1 && !this.isDead) {
             this.health = 0;
             this.updateHealthBar();
             this.die();
@@ -295,6 +295,7 @@ export class Player {
         else bar.style.backgroundColor = "#f00";
     }
     die() {
+        this.isDead = true
         const screen = document.getElementById("death-screen")
         const killsLabel = document.getElementById("death-kills")
         const timeLabel = document.getElementById("death-time")
@@ -304,6 +305,10 @@ export class Player {
         timeLabel.textContent = `Survived: ${this.ui.timerData.time}`
 
         screen.style.display = "flex";
+        const name = prompt("Enter your name for the leaderboard:", "Player");
+
+        addScore(name, this.enemyManager.kills, this.ui.timerData.time);
+
 
         // Freeze le joueur
         this.speed = 0
