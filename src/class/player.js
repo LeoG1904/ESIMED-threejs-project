@@ -246,7 +246,7 @@ export class Player {
             }
 
             // Supprimer si trop loin
-            if (p.position.length() > 200) {
+            if (p.position.distanceTo(this.mesh.position) > 25) {
                 this.scene.remove(p);
                 this.projectiles.splice(i, 1);
             }
