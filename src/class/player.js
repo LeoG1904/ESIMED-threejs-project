@@ -306,5 +306,14 @@ export class Player {
         this.speed = 0
         this.fireRate = 99999
     }
+    showDamageFlash() {
+        const flash = document.getElementById("damage-flash");
+        flash.style.opacity = 1;
+
+        // Retour à transparent rapidement
+        setTimeout(() => {
+            flash.style.opacity = 0;
+        }, 100); // flash 0.1s
+    }
 
 }

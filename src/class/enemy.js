@@ -67,7 +67,7 @@ export class Enemy {
                     this.player.mesh.position
                 ).normalize().multiplyScalar(0.5);
                 this.mesh.position.add(pushBack);
-
+                this.player.showDamageFlash()
                 // Réactiver après un petit délai pour pouvoir infliger à nouveau des dégâts
                 setTimeout(() => (this.hasHit = false), 500); // 0.5s
             }

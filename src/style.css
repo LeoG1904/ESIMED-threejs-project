@@ -174,7 +174,7 @@ button:focus-visible {
   height: 100vh;
   background: rgba(0,0,0,0.5);
   color: white;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -258,4 +258,16 @@ button:focus-visible {
 
 .menu-btn:active {
   transform: scale(0.95);        /* Effet d’appui */
+}
+#damage-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 0, 0, 0.5);
+  pointer-events: none; /* ne bloque pas la souris */
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  z-index: 9999; /* au-dessus de tout */
 }
