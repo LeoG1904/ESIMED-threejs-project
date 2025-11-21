@@ -21,6 +21,7 @@ export class Player {
         this.velocityY = 0
         this.gravity = -20
         this.jumpPower = 8
+        this.jumpPowerPerc = 1
         this.isGrounded = true
 
         // Vie
@@ -38,7 +39,9 @@ export class Player {
         this.timeSinceLastShot = 0
 
         this.freezeChance = 0;
+
         this.deathExplosionChance = 0
+        this.explosionSizePerc = 1
 
 
         // EXP / Level
@@ -109,7 +112,7 @@ export class Player {
             case "d": this.direction.right = isDown; break;
             case " ":
                 if (isDown && this.isGrounded) {
-                    this.velocityY = this.jumpPower;
+                    this.velocityY = this.jumpPower * this.jumpPowerPerc;
                     this.isGrounded = false;
                 }
                 break;
@@ -245,7 +248,7 @@ export class Player {
     }
 
     createExplosion(position) {
-        const geometry = new THREE.SphereGeometry(1, 8, 8);
+        const geometry = new THREE.SphereGeometry(this.explosionSizePerc, 8, 8);
         const material = new THREE.MeshBasicMaterial({ color: 0xff5500 });
         const explosion = new THREE.Mesh(geometry, material);
         explosion.position.copy(position);
@@ -254,7 +257,7 @@ export class Player {
         // dégâts aux ennemis proches
         for (let i = this.enemyManager.enemies.length - 1; i >= 0; i--) {
             const enemy = this.enemyManager.enemies[i];
-            if (enemy.mesh.position.distanceTo(position) < 3) {
+            if (enemy.mesh.position.distanceTo(position) < 3 * this.explosionSizePerc) {
                 enemy.health -= 20;
                 if (enemy.health <= 0) {
                     this.scene.remove(enemy.mesh);

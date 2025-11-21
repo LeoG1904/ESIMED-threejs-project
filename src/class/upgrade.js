@@ -4,6 +4,10 @@ export const UPGRADES = [
         apply: (player) => player.projectileDamagePerc += 0.2
     },
     {
+        name: "Jump power +20%",
+        apply: (player) => player.jumpPowerPerc += 0.2
+    },
+    {
         name: "Fire Rate +25%",
         apply: (player) => player.fireRatePerc += 0.25  // tirer plus vite
     },
@@ -29,10 +33,17 @@ export const UPGRADES = [
         }
     },
     {
-        name: "Death Explosion +10%",
+        name: "Explosion Chance +10%",
         description: "Chance qu'un ennemi explose à sa mort",
         apply: (player) => {
             player.deathExplosionChance += 10; // augmente de 10% chaque fois
+        }
+    },
+    {
+        name: "Explosion Size +10%",
+        description: "Taille de l'explosion",
+        apply: (player) => {
+            player.explosionSizePerc += 0.1;
         }
     }
 

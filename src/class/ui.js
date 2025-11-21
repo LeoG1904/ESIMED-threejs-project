@@ -73,13 +73,19 @@ export class Ui{
             speedPerc: player.speedPerc,
             fireRatePerc: player.fireRatePerc,
             freezeChance: player.freezeChance,
-            deathExplosionChance: player.deathExplosionChance
+            deathExplosionChance: player.deathExplosionChance,
+            explosionSizePerc: player.explosionSizePerc,
+            jumpPowerPerc: player.jumpPowerPerc
         };
 
         this.playerFolder = this.GUI.addFolder("Player Stats");
 
         this.playerFolder.add(this.playerStats, "maxHealth")
             .name("Max Health")
+            .listen();
+
+        this.playerFolder.add(this.playerStats, "jumpPowerPerc")
+            .name("Jump power")
             .listen();
 
         this.playerFolder.add(this.playerStats, "projectileDamagePerc")
@@ -102,6 +108,10 @@ export class Ui{
             .name("Explosion chance")
             .listen();
 
+        this.playerFolder.add(this.playerStats, "explosionSizePerc")
+            .name("Explosion size")
+            .listen();
+
         this.playerFolder.open();
     }
     updatePlayerStats(player) {
@@ -111,6 +121,8 @@ export class Ui{
         this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
         this.playerStats.freezeChance = Number(player.freezeChance.toFixed(2));
         this.playerStats.deathExplosionChance = Number(player.deathExplosionChance.toFixed(2))
+        this.playerStats.explosionSizePerc = Number(player.explosionSizePerc.toFixed(2))
+        this.playerStats.jumpPowerPerc = Number(player.jumpPowerPerc.toFixed(2))
     }
 
 
