@@ -107,7 +107,7 @@ export class Application {
         ]
 
         this.groundParams = {
-            texture: this.groundTextures[0],
+            texture: this.groundTextures[3],
             repeats: 1000
         }
 
@@ -118,7 +118,7 @@ export class Application {
         ]
 
         this.skyParams = {
-            file: this.skyboxFiles[0]
+            file: this.skyboxFiles[2]
         }
 
         this.sunParams = {
