@@ -174,7 +174,8 @@ button:focus-visible {
   height: 100vh;
   background: rgba(0,0,0,0.5);
   color: white;
-  display: none;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 4rem;
@@ -236,4 +237,25 @@ button:focus-visible {
 #menu-screen button:hover {
   background-color: #357ab7;
   transform: scale(1.05);
+}
+.menu-btn {
+  padding: 12px 25px;           /* Taille du bouton */
+  font-size: 1.5rem;            /* Texte lisible */
+  font-weight: bold;             /* Texte en gras */
+  color: white;                  /* Texte blanc */
+  background-color: #ff4d4d;    /* Rouge vif pour se démarquer */
+  border: none;                  /* Pas de bordure */
+  border-radius: 12px;           /* Coins arrondis */
+  cursor: pointer;               /* Curseur pointer */
+  transition: all 0.2s ease;    /* Effet de transition fluide */
+  margin-top: 0.5rem;            /* Petit espace avec les autres boutons */
+}
+
+.menu-btn:hover {
+  background-color: #ff1a1a;     /* Rouge plus foncé au survol */
+  transform: scale(1.05);        /* Petit effet d’agrandissement */
+}
+
+.menu-btn:active {
+  transform: scale(0.95);        /* Effet d’appui */
 }

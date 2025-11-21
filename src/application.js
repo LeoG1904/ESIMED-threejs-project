@@ -22,10 +22,12 @@ export class Application {
         });
 
 
-        const menuBtn = document.getElementById("menu-btn");
-        menuBtn.addEventListener("click", () => {
-            homePage.style.display = 'bloc';
-            location.reload();
+        const menuBtns = document.querySelectorAll(".menu-btn");
+        menuBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                homePage.style.display = 'bloc';
+                location.reload();
+            });
         });
 
 
