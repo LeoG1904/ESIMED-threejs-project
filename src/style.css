@@ -162,7 +162,9 @@ button:focus-visible {
   padding: 10px 20px;
   font-size: 1.5rem;
   cursor: pointer;
+  margin-top: 0.5rem; /* petit espace entre les boutons */
 }
+
 
 #pause-screen{
 

@@ -7,6 +7,7 @@ import {Enemy} from "./class/enemy.js";
 import {EnemyManager} from "./class/enemyManager.js";
 
 const deathScreen = document.getElementById("death-screen")
+const homePage = document.getElementById("homepage")
 
 export class Application {
     
@@ -17,6 +18,13 @@ export class Application {
         document.body.appendChild(this.renderer.domElement)
 
         document.getElementById("restart-btn").addEventListener("click", () => {
+            location.reload();
+        });
+
+
+        const menuBtn = document.getElementById("menu-btn");
+        menuBtn.addEventListener("click", () => {
+            homePage.style.display = 'bloc';
             location.reload();
         });
 
