@@ -7,6 +7,23 @@
     <title>threejs-tp1</title>
   </head>
   <body>
+  <div id="pause-screen" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+">
+    PAUSED
+  </div>
+
   <div id="death-screen">
     <h1>YOU DIED</h1>
     <p id="death-kills"></p>

@@ -4,7 +4,10 @@ import {UPGRADES} from "./upgrade.js"
 export class Player {
 
     constructor(scene, enemyManager,ui) {
+
         this.isPaused = false
+        this.isLevelUp = false
+
         this.scene = scene
         this.enemyManager = enemyManager
         this.ui = ui
@@ -63,6 +66,7 @@ export class Player {
     }
 
     levelUp() {
+        this.isLevelUp = true
         this.isPaused = true;
         this.level++;
         this.exp -= this.expToNextLevel;
@@ -77,6 +81,7 @@ export class Player {
         this.ui.showUpgradesPopup(choices, (upgrade) => {
             upgrade.apply(this);   // appliquer l'amélioration
             this.isPaused = false
+            this.isLevelUp = false
         });
     }
     createMesh() {
@@ -108,6 +113,13 @@ export class Player {
                     this.isGrounded = false;
                 }
                 break;
+            case "escape":
+                if (isDown && !this.isLevelUp) {
+                    this.isPaused = !this.isPaused
+                    document.getElementById("pause-screen").style.display =
+                        this.isPaused ? "flex" : "none";
+                }
+                break
         }
     }
 
