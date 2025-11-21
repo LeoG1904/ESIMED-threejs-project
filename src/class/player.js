@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import {UPGRADES} from "./upgrade.js"
+import {RARITIES, UPGRADES} from "./upgrade.js"
 
 export class Player {
 
@@ -76,13 +76,18 @@ export class Player {
         this.expToNextLevel = Math.floor(this.expToNextLevel * 1.05); // croissance exp
 
         // Prendre 3 upgrades au hasard
+
         const choices = [...UPGRADES]
             .sort(() => Math.random() - 0.5)
-            .slice(0, 3);
+            .slice(0, 3)
+            .map(up => {
+                const rarity = RARITIES[Math.floor(Math.random() * RARITIES.length)];
+                return { ...up, rarity };
+            });
 
         // Demander à l’UI d’afficher le popup
         this.ui.showUpgradesPopup(choices, (upgrade) => {
-            upgrade.apply(this);   // appliquer l'amélioration
+            upgrade.apply(this, upgrade.rarity.multiplier);   // appliquer l'amélioration
             this.isPaused = false
             this.isLevelUp = false
         });

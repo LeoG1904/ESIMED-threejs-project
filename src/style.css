@@ -163,3 +163,19 @@ button:focus-visible {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+#pause-screen{
+
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-family: Arial, sans-serif;
+  z-index: 9999;
+}

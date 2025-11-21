@@ -51,13 +51,32 @@ export class Ui{
 
         upgrades.forEach(up => {
             const btn = document.createElement("button");
-            btn.textContent = up.name;
+
+            // Style visuel
             btn.style.padding = "15px";
             btn.style.fontSize = "18px";
+            btn.style.margin = "10px";
+            btn.style.border = `3px solid ${up.rarity.color}`;
+            btn.style.color = up.rarity.color;
+            btn.style.background = "#222";
+            btn.style.cursor = "pointer";
+            btn.style.borderRadius = "10px";
+
+            // Texte : nom + rareté + bonus réel calculé
+            const value = (up.base * up.rarity.multiplier).toFixed(2);
+
+            btn.innerHTML = `
+            <strong style="color:${up.rarity.color}">
+                ${up.rarity.name} • ${up.name}
+            </strong><br>
+            <span style="font-size:14px; color:#ddd">
+                Bonus : +${value}
+            </span>
+        `;
 
             btn.onclick = () => {
                 popup.style.display = "none";
-                onSelect(up);
+                onSelect(up);  // le onSelect doit déjà appeler apply(player, mult)
             };
 
             container.appendChild(btn);
@@ -65,6 +84,7 @@ export class Ui{
 
         popup.style.display = "flex";
     }
+
 
     addPlayerStats(player) {
         this.playerStats = {

@@ -1,50 +1,58 @@
+export const RARITIES = [
+    { name: "Commun",      color: "#b0b0b0", multiplier: 1.0 },
+    { name: "Rare",        color: "#4fa3ff", multiplier: 1.5 },
+    { name: "Épique",      color: "#c14fff", multiplier: 2.2 },
+    { name: "Légendaire",  color: "#ffb300", multiplier: 3.5 }
+];
 export const UPGRADES = [
     {
-        name: "Damage +20%",
-        apply: (player) => player.projectileDamagePerc += 0.2
+        name: "Damage",
+        base: 0.2,
+        apply: (player, mult) => player.projectileDamagePerc += 0.2 * mult
     },
     {
-        name: "Jump power +20%",
-        apply: (player) => player.jumpPowerPerc += 0.2
+        name: "Jump Power",
+        base: 0.2,
+        apply: (player, mult) => player.jumpPowerPerc += 0.2 * mult
     },
     {
-        name: "Fire Rate +25%",
-        apply: (player) => player.fireRatePerc += 0.25  // tirer plus vite
+        name: "Fire Rate",
+        base: 0.25,
+        apply: (player, mult) => player.fireRatePerc += 0.25 * mult
     },
     {
-        name: "Max Health +20",
-        apply: (player) => {
-            player.maxHealth += 20;
-            player.health += 20;
+        name: "Max Health",
+        base: 20,
+        apply: (player, mult) => {
+            const bonus = 20 * mult;
+            player.maxHealth += bonus;
+            player.health += bonus;
             player.updateHealthBar();
         }
     },
     {
-        name: "Move Speed +15%",
-        apply: (player) => player.speedPerc += 0.15
-    },
-    { name: "Freeze Chance +5%", apply: (player) => player.freezeChance += 5
-    }, // +5% chance
-
-    {name: "Multi-shot +1",
-        description: "Tire plusieurs projectiles en même temps",
-        apply: (player) => {
-            player.projectilesPerShot += 1;
-        }
+        name: "Move Speed",
+        base: 0.15,
+        apply: (player, mult) => player.speedPerc += 0.15 * mult
     },
     {
-        name: "Explosion Chance +10%",
-        description: "Chance qu'un ennemi explose à sa mort",
-        apply: (player) => {
-            player.deathExplosionChance += 10; // augmente de 10% chaque fois
-        }
+        name: "Freeze Chance",
+        base: 5,
+        apply: (player, mult) => player.freezeChance += 5 * mult
     },
     {
-        name: "Explosion Size +10%",
-        description: "Taille de l'explosion",
-        apply: (player) => {
-            player.explosionSizePerc += 0.1;
-        }
+        name: "Multi-shot",
+        base: 1,
+        apply: (player, mult) => player.projectilesPerShot += Math.round(1 * mult)
+    },
+    {
+        name: "Explosion Chance",
+        base: 10,
+        apply: (player, mult) => player.deathExplosionChance += 10 * mult
+    },
+    {
+        name: "Explosion Size",
+        base: 0.1,
+        apply: (player, mult) => player.explosionSizePerc += 0.1 * mult
     }
-
 ];
