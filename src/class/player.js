@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import {RARITIES, UPGRADES} from "./upgrade.js"
+import {getRandomRarity, RARITIES, UPGRADES} from "./upgrade.js"
 
 export class Player {
 
@@ -68,6 +68,8 @@ export class Player {
         this.updateExpBar()
     }
 
+
+
     levelUp() {
         this.isLevelUp = true
         this.isPaused = true;
@@ -81,8 +83,7 @@ export class Player {
             .sort(() => Math.random() - 0.5)
             .slice(0, 3)
             .map(up => {
-                const rarity = RARITIES[Math.floor(Math.random() * RARITIES.length)];
-                return { ...up, rarity };
+                return { ...up, rarity:getRandomRarity() };
             });
 
         // Demander à l’UI d’afficher le popup

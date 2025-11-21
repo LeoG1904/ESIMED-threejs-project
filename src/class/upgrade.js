@@ -1,9 +1,20 @@
 export const RARITIES = [
-    { name: "Commun",      color: "#b0b0b0", multiplier: 1.0 },
-    { name: "Rare",        color: "#4fa3ff", multiplier: 1.5 },
-    { name: "Épique",      color: "#c14fff", multiplier: 2.2 },
-    { name: "Légendaire",  color: "#ffb300", multiplier: 3.5 }
+    { name: "Commun",      color: "#b0b0b0", multiplier: 0.5, weight: 60 },
+    { name: "Rare",        color: "#4fa3ff", multiplier: 1,   weight: 25 },
+    { name: "Épique",      color: "#c14fff", multiplier: 1.5, weight: 12 },
+    { name: "Légendaire",  color: "#ffb300", multiplier: 2,   weight: 3 }
 ];
+export function getRandomRarity() {
+    const totalWeight = RARITIES.reduce((sum, r) => sum + r.weight, 0);
+    let roll = Math.random() * totalWeight;
+
+    for (const rarity of RARITIES) {
+        if (roll < rarity.weight) return rarity;
+        roll -= rarity.weight;
+    }
+
+    return RARITIES[0]; // fallback
+}
 export const UPGRADES = [
     {
         name: "Damage",
