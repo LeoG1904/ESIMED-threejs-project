@@ -42,6 +42,11 @@ export const UPGRADES = [
         }
     },
     {
+        name: "Auto Health",
+        base: 0.25,
+        apply: (player, mult) => player.autoHealth += 0.1 * mult
+    },
+    {
         name: "Move Speed",
         base: 0.15,
         apply: (player, mult) => player.speedPerc += 0.15 * mult

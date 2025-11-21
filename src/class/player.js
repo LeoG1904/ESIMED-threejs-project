@@ -27,6 +27,7 @@ export class Player {
         // Vie
         this.maxHealth = 100
         this.health = this.maxHealth
+        this.autoHealth = 0
 
         // Projectiles
         this.projectiles = []
@@ -160,6 +161,8 @@ export class Player {
             this.timeSinceLastShot = 0;
         }
 
+        this.health += this.autoHealth * dt
+        if (this.health>this.maxHealth) this.health = this.maxHealth
         // Déplacer les projectiles
         this.updateProjectiles(dt);
 

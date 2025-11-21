@@ -89,6 +89,7 @@ export class Ui{
     addPlayerStats(player) {
         this.playerStats = {
             maxHealth: player.maxHealth,
+            autoHealth: player.autoHealth,
             projectileDamagePerc: player.projectileDamagePerc,
             speedPerc: player.speedPerc,
             fireRatePerc: player.fireRatePerc,
@@ -102,6 +103,10 @@ export class Ui{
 
         this.playerFolder.add(this.playerStats, "maxHealth")
             .name("Max Health")
+            .listen();
+
+        this.playerFolder.add(this.playerStats, "autoHealth")
+            .name("Health per sec")
             .listen();
 
         this.playerFolder.add(this.playerStats, "jumpPowerPerc")
@@ -136,6 +141,7 @@ export class Ui{
     }
     updatePlayerStats(player) {
         this.playerStats.maxHealth = player.maxHealth;
+        this.playerStats.autoHealth = player.autoHealth;
         this.playerStats.projectileDamagePerc = Number((player.projectileDamagePerc / player.projectilesPerShot).toFixed(2) );
         this.playerStats.speedPerc = Number(player.speedPerc.toFixed(2));
         this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
