@@ -179,3 +179,59 @@ button:focus-visible {
   font-family: Arial, sans-serif;
   z-index: 9999;
 }
+/* Container global */
+#homepage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Canvas d'arrière-plan */
+#bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1; /* derrière le menu */
+}
+
+/* Menu */
+#menu-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2; /* au-dessus du canvas */
+  color: white;
+  pointer-events: auto; /* pour cliquer sur les boutons */
+  background: rgba(0, 0, 0, 0.5); /* légère transparence pour voir le fond */
+}
+
+#menu-screen h1 {
+  font-size: 4rem;
+  margin-bottom: 40px;
+  color: #4fa3ff;
+}
+
+#menu-screen button {
+  padding: 20px 40px;
+  font-size: 1.8rem;
+  background-color: #4fa3ff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#menu-screen button:hover {
+  background-color: #357ab7;
+  transform: scale(1.05);
+}
