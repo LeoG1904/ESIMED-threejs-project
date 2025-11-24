@@ -85,22 +85,22 @@ export class Ui{
         popup.style.display = "flex";
     }
 
-
     addPlayerStats(player) {
-        // On sépare clairement les stats Movement et Combat
         this.playerStats = {
             // Movement
             speedPerc: player.movement.speedPerc,
             jumpPowerPerc: player.movement.jumpPowerPerc,
 
-            // Combat
+            // Combat (hors maxHealth / autoHealth)
+            projectileDamagePerc: player.combat.projectileDamagePerc,
+            fireRatePerc: player.combat.fireRatePerc,
+            freezeChance: player.combat.freezeChance,
+            deathExplosionChance: player.combat.deathExplosionChance,
+            explosionSizePerc: player.combat.explosionSizePerc,
+
+            // Life
             maxHealth: player.maxHealth,
-            autoHealth: player.autoHealth,
-            projectileDamagePerc: player.projectileDamagePerc,
-            fireRatePerc: player.fireRatePerc,
-            freezeChance: player.freezeChance,
-            deathExplosionChance: player.deathExplosionChance,
-            explosionSizePerc: player.explosionSizePerc
+            autoHealth: player.autoHealth
         };
 
         this.playerFolder = this.GUI.addFolder("Player Stats");
@@ -109,9 +109,11 @@ export class Ui{
         this.playerFolder.add(this.playerStats, "speedPerc").name("Move Speed").listen();
         this.playerFolder.add(this.playerStats, "jumpPowerPerc").name("Jump Power").listen();
 
-        // --- Combat Stats ---
+        // --- Life Stats ---
         this.playerFolder.add(this.playerStats, "maxHealth").name("Max Health").listen();
         this.playerFolder.add(this.playerStats, "autoHealth").name("Health per sec").listen();
+
+        // --- Combat Stats ---
         this.playerFolder.add(this.playerStats, "projectileDamagePerc").name("Damage per bullet").listen();
         this.playerFolder.add(this.playerStats, "fireRatePerc").name("Fire Rate").listen();
         this.playerFolder.add(this.playerStats, "freezeChance").name("Freeze Chance").listen();
@@ -126,14 +128,16 @@ export class Ui{
         this.playerStats.speedPerc = Number(player.movement.speedPerc.toFixed(2));
         this.playerStats.jumpPowerPerc = Number(player.movement.jumpPowerPerc.toFixed(2));
 
-        // --- Combat Stats ---
+        // --- Life Stats ---
         this.playerStats.maxHealth = player.maxHealth;
         this.playerStats.autoHealth = player.autoHealth;
-        this.playerStats.projectileDamagePerc = Number((player.projectileDamagePerc / player.projectilesPerShot).toFixed(2));
-        this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
-        this.playerStats.freezeChance = Number(player.freezeChance.toFixed(2));
-        this.playerStats.deathExplosionChance = Number(player.deathExplosionChance.toFixed(2));
-        this.playerStats.explosionSizePerc = Number(player.explosionSizePerc.toFixed(2));
+
+        // --- Combat Stats ---
+        this.playerStats.projectileDamagePerc = Number((player.combat.projectileDamagePerc / player.combat.projectilesPerShot).toFixed(2));
+        this.playerStats.fireRatePerc = Number(player.combat.fireRatePerc.toFixed(3));
+        this.playerStats.freezeChance = Number(player.combat.freezeChance.toFixed(2));
+        this.playerStats.deathExplosionChance = Number(player.combat.deathExplosionChance.toFixed(2));
+        this.playerStats.explosionSizePerc = Number(player.combat.explosionSizePerc.toFixed(2));
     }
 
 

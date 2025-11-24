@@ -2,6 +2,7 @@ import * as THREE from "three"
 import {getRandomRarity, RARITIES, UPGRADES} from "../upgrade.js"
 import {addScore} from "../leaderBoard.js";
 import {PlayerMovement} from "./PlayerMovement.js";
+import {PlayerCombat} from "./PlayerCombat.js";
 
 export class Player {
 
@@ -15,28 +16,13 @@ export class Player {
         this.ui = ui
 
         this.movement = new PlayerMovement(this);
+        this.combat = new PlayerCombat(this);
 
 
         // Vie
         this.maxHealth = 100
         this.health = this.maxHealth
         this.autoHealth = 0
-
-        // Projectiles
-        this.projectiles = []
-        this.projectilesPerShot = 1
-        this.projectileSpeed = 20
-        this.projectileDamage = 25
-        this.projectileDamagePerc = 1
-        this.fireRate = 0.5
-        this.fireRatePerc = 1
-        this.timeSinceLastShot = 0
-
-        this.freezeChance = 0;
-
-        this.deathExplosionChance = 0
-        this.explosionSizePerc = 1
-
 
         // EXP / Level
         this.level = 1;
@@ -66,6 +52,9 @@ export class Player {
     levelUp() {
         this.isLevelUp = true
         this.isPaused = true;
+
+        this.movement.resetDirection();
+
         this.level++;
         this.exp -= this.expToNextLevel;
         this.expToNextLevel = Math.floor(this.expToNextLevel * 1.05); // croissance exp
@@ -97,22 +86,16 @@ export class Player {
     }
 
     update(dt) {
-        if (!dt) return;
+        if (!dt || this.isPaused) return;
 
         // Déplacement géré par PlayerMovement
         this.movement.update(dt);
 
-        // Tir automatique
-        this.timeSinceLastShot += dt;
-        if (this.timeSinceLastShot >= this.fireRate / this.fireRatePerc) {
-            this.shootAtClosestEnemy();
-            this.timeSinceLastShot = 0;
-        }
+        // Gestion du combat
+        this.combat.update(dt);
 
         this.health += this.autoHealth * dt
         if (this.health>this.maxHealth) this.health = this.maxHealth
-        // Déplacer les projectiles
-        this.updateProjectiles(dt);
 
         // Mettre à jour la barre de vie
         this.updateHealthBar();
@@ -124,112 +107,6 @@ export class Player {
 
     }
 
-    shootAtClosestEnemy() {
-        if (!this.enemyManager || this.enemyManager.enemies.length === 0) return;
-
-        // Trouver l'ennemi le plus proche
-        let closest = null;
-        let minDist = Infinity;
-        this.enemyManager.enemies.forEach(enemy => {
-            const dist = this.mesh.position.distanceTo(enemy.mesh.position);
-            if (dist < minDist) {
-                minDist = dist;
-                closest = enemy;
-            }
-        });
-
-        if (!closest) return;
-
-        for (let i = 0; i < this.projectilesPerShot; i++) {
-            const geometry = new THREE.SphereGeometry(0.2, 8, 8);
-            const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-            const projectile = new THREE.Mesh(geometry, material);
-
-            projectile.position.copy(this.mesh.position);
-
-            // Légère variation d'angle pour les projectiles multiples
-            const spreadAngle = (i - (this.projectilesPerShot - 1) / 2) * 0.1; // ±0.1 rad
-            const direction = new THREE.Vector3().subVectors(closest.mesh.position, this.mesh.position).normalize();
-            direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), spreadAngle);
-
-            projectile.userData.direction = direction;
-
-            this.scene.add(projectile);
-            this.projectiles.push(projectile);
-        }
-    }
-
-    updateProjectiles(dt) {
-        for (let i = this.projectiles.length - 1; i >= 0; i--) {
-            const p = this.projectiles[i];
-            // Déplacer le projectile
-            p.position.add(p.userData.direction.clone().multiplyScalar(this.projectileSpeed * dt));
-
-            // Vérifier collision avec les ennemis
-            for (let j = this.enemyManager.enemies.length - 1; j >= 0; j--) {
-                const enemy = this.enemyManager.enemies[j];
-                if (p.position.distanceTo(enemy.mesh.position) < 0.7) { // 0.7 = seuil de collision
-                    // Infliger dégâts
-                    enemy.health -= ( this.projectileDamage * this.projectileDamagePerc ) / this.projectilesPerShot ;
-
-                    // Supprimer le projectile
-                    this.scene.remove(p);
-                    this.projectiles.splice(i, 1);
-
-                    // Si l'ennemi meurt
-                    if (enemy.health <= 0) {
-                        this.scene.remove(enemy.mesh);
-                        this.enemyManager.enemies.splice(j, 1);
-                        this.enemyManager.kills += 1;             // incrémenter le compteur
-                        this.gainExp(10)
-
-                        if (Math.random() * 100 < this.deathExplosionChance) {
-                            this.createExplosion(enemy.mesh.position);
-                        }
-
-                    }else{
-                        if (Math.random() < this.freezeChance / 100) {
-                            enemy.freeze(3); // gel pour 3 secondes
-                        }
-                    }
-                    break; // sortir de la boucle ennemis
-                }
-            }
-
-            // Supprimer si trop loin
-            if (p.position.distanceTo(this.mesh.position) > 25) {
-                this.scene.remove(p);
-                this.projectiles.splice(i, 1);
-            }
-        }
-    }
-
-    createExplosion(position) {
-        const geometry = new THREE.SphereGeometry(this.explosionSizePerc, 8, 8);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff5500 });
-        const explosion = new THREE.Mesh(geometry, material);
-        explosion.position.copy(position);
-        this.scene.add(explosion);
-
-        // dégâts aux ennemis proches
-        for (let i = this.enemyManager.enemies.length - 1; i >= 0; i--) {
-            const enemy = this.enemyManager.enemies[i];
-            if (enemy.mesh.position.distanceTo(position) < 3 * this.explosionSizePerc) {
-                enemy.health -= 20;
-                if (enemy.health <= 0) {
-                    this.scene.remove(enemy.mesh);
-                    this.enemyManager.enemies.splice(i, 1);
-                    this.enemyManager.kills += 1;
-                    this.gainExp(10);
-
-                }
-            }
-        }
-
-
-        // disparition rapide
-        setTimeout(() => this.scene.remove(explosion), 300);
-    }
 
     updateHealthBar() {
         const bar = document.getElementById("health-bar");

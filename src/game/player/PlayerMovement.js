@@ -40,6 +40,12 @@ export class PlayerMovement {
         }
     }
 
+    resetDirection() {
+        this.direction.forward = false;
+        this.direction.backward = false;
+        this.direction.left = false;
+        this.direction.right = false;
+    }
     update(dt) {
         if (!dt) return;
 
