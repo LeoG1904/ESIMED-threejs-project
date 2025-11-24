@@ -57,6 +57,7 @@ export class Player {
     }
 
     die() {
+        if (this.isDead) return
         this.sounds.playDeath()
         this.isDead = true
         this.isPaused = true;

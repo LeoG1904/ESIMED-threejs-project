@@ -1,7 +1,7 @@
     export class PlayerSound {
         constructor() {
             // Son quand le joueur se fait frapper
-            this.hitSound = new Audio('sounds/hit.mp3   ');
+            this.hitSound = new Audio('sounds/hit.mp3');
             this.hitSound.volume = 0.5;
 
             // Son quand le joueur tire
