@@ -20,8 +20,9 @@ export class Enemy {
         this.originalColor = color
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({ color });
+        const material = new THREE.MeshPhongMaterial({ color, flatShading: true });
         this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.castShadow = true;
 
         this.mesh.scale.set(scale, scale, scale);
 

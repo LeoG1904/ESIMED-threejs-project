@@ -20,13 +20,6 @@ export class Application {
         this.renderer.shadowMap.enabled = true;
         document.body.appendChild(this.renderer.domElement);
 
-        // ------------------------------
-        // UI buttons
-        // ------------------------------
-        document.getElementById("restart-btn").addEventListener("click", () => {
-            location.reload();
-        });
-
         document.querySelectorAll(".menu-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 homePage.style.display = "block";

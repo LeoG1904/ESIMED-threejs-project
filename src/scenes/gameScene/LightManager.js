@@ -15,10 +15,12 @@ export class LightManager {
 
     addSun() {
         this.sun = new THREE.DirectionalLight(0xffffff, 2.0);
-        this.sun.position.set(20, 100, 0);
+
+        this.sun.position.set(0, 1000, 0);
+        this.sun.target.position.set(0,0,0)
         this.sun.castShadow = true;
 
-        this.sun.shadow.mapSize.set(2048, 2048);
+        this.sun.shadow.mapSize.set(4048, 4048);
 
         this.sun.shadow.camera.left = -100;
         this.sun.shadow.camera.right = 100;
@@ -27,6 +29,7 @@ export class LightManager {
         this.sun.shadow.camera.far = 300;
 
         this.scene.add(this.sun);
+
     }
 
     update(params) {

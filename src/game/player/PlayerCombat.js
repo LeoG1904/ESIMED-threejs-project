@@ -18,10 +18,25 @@ export class PlayerCombat {
         this.freezeChance = 0;
         this.deathExplosionChance = 0;
         this.explosionSizePerc = 1;
+
+        // Explosions
+        this.explosions = [];
     }
 
     update(dt) {
         if (!dt) return;
+
+        // Mise à jour des explosions
+        if (this.explosions) {
+            for (let i = this.explosions.length - 1; i >= 0; i--) {
+                const exp = this.explosions[i];
+                exp.userData.lifetime += dt;
+                if (exp.userData.lifetime >= 0.3) { // 0.3s
+                    this.player.scene.remove(exp);
+                    this.explosions.splice(i, 1);
+                }
+            }
+        }
 
         this.timeSinceLastShot += dt;
         if (this.timeSinceLastShot >= this.fireRate / this.fireRatePerc) {
@@ -65,6 +80,8 @@ export class PlayerCombat {
             this.player.scene.add(projectile);
             this.projectiles.push(projectile);
         }
+
+        this.player.sounds.playShoot()
     }
 
     updateProjectiles(dt) {
@@ -93,6 +110,7 @@ export class PlayerCombat {
                             this.createExplosion(enemy.mesh.position);
                         }
                     } else if (Math.random() * 100 < this.freezeChance) {
+                        this.player.sounds.playFreeze()
                         enemy.freeze?.(3);
                     }
                     break;
@@ -107,28 +125,32 @@ export class PlayerCombat {
     }
 
     createExplosion(position) {
+        this.player.sounds.playExplosion()
         const geometry = new THREE.SphereGeometry(this.explosionSizePerc, 8, 8);
         const material = new THREE.MeshBasicMaterial({ color: 0xff5500 });
         const explosion = new THREE.Mesh(geometry, material);
         explosion.position.copy(position);
+        explosion.userData.lifetime = 0; // temps écoulé depuis sa création
         this.player.scene.add(explosion);
+        this.explosions.push(explosion);
 
         const enemies = this.player.enemyManager?.enemies;
-        if (enemies) {
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                const enemy = enemies[i];
-                if (enemy.mesh.position.distanceTo(position) < 3 * this.explosionSizePerc) {
-                    enemy.health -= 20;
-                    if (enemy.health <= 0) {
-                        this.player.scene.remove(enemy.mesh);
-                        enemies.splice(i, 1);
-                        this.player.enemyManager.kills++;
-                        this.player.gainExp(10);
-                    }
+        if (enemies) { for (let i = enemies.length - 1; i >= 0; i--)
+        {
+            const enemy = enemies[i];
+            if (enemy.mesh.position.distanceTo(position) < 3 * this.explosionSizePerc)
+            {
+                enemy.health -= 20;
+                if (enemy.health <= 0)
+                {
+                    this.player.scene.remove(enemy.mesh);
+                    enemies.splice(i, 1);
+                    this.player.enemyManager.kills++;
+                    this.player.xp.gainExp(10);
                 }
             }
         }
+        }
 
-        setTimeout(() => this.player.scene.remove(explosion), 300);
     }
 }

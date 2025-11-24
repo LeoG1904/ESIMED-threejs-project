@@ -1,10 +1,11 @@
 import * as THREE from "three"
 import {getRandomRarity, RARITIES, UPGRADES} from "../Upgrade.js"
-import {addScore} from "../LeaderBoard.js";
+import {addScore} from "../leaderBoard.js";
 import {PlayerMovement} from "./PlayerMovement.js";
 import {PlayerCombat} from "./PlayerCombat.js";
 import {PlayerHealth} from "./PlayerHealth.js";
 import {PlayerXP} from "./PlayerXP.js";
+import {PlayerSound} from "./PlayerSound.js";
 
 export class Player {
 
@@ -21,6 +22,7 @@ export class Player {
         this.combat = new PlayerCombat(this);
         this.healthManager = new PlayerHealth(this);
         this.xp = new PlayerXP(this);
+        this.sounds = new PlayerSound();
 
         this.createMesh()
     }
@@ -42,10 +44,13 @@ export class Player {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(0, 0.5, 0);
 
+        this.mesh.castShadow = true
+
         this.scene.add(this.mesh);
     }
 
     die() {
+        this.sounds.playDeath()
         this.isDead = true
         this.isPaused = true;
         const screen = document.getElementById("death-screen")

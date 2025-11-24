@@ -11,6 +11,7 @@ export class PlayerHealth {
     }
 
     takeDamage(amount) {
+        this.player.sounds.playHit()
         this.health -= amount;
         if (this.health <= 0) {
             this.health = 0;

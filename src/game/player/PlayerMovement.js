@@ -24,8 +24,6 @@ export class PlayerMovement {
     }
 
     handleKey(e, isDown) {
-        if (this.player.isLevelUp) return; // bloquer les mouvements pendant le level-up
-
         switch (e.key.toLowerCase()) {
             case "z": case "w": this.direction.forward = isDown; break;
             case "s": this.direction.backward = isDown; break;
@@ -35,10 +33,11 @@ export class PlayerMovement {
                 if (isDown && this.isGrounded) {
                     this.velocityY = this.jumpPower * this.jumpPowerPerc;
                     this.isGrounded = false;
+                    this.player.sounds.playJump()
                 }
                 break;
             case "escape":
-                if (isDown) {
+                if (isDown && !this.player.isLevelUp) {
                     this.player.isPaused = !this.player.isPaused
                     document.getElementById("pause-screen").style.display =
                         this.player.isPaused ? "flex" : "none";

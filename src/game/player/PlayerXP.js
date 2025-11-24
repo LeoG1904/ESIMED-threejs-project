@@ -20,7 +20,7 @@ export class PlayerXP {
         this.level++;
         this.exp -= this.expToNextLevel;
         this.expToNextLevel = Math.floor(this.expToNextLevel * 1.05);
-        this.player.movement.resetDirection();
+
         this.player.ui.showUpgradesPopup(
             [...UPGRADES].sort(() => Math.random() - 0.5).slice(0, 3)
                 .map(up => ({ ...up, rarity: getRandomRarity() })),
@@ -30,6 +30,7 @@ export class PlayerXP {
                 this.player.isLevelUp = false;
             }
         );
+        this.player.sounds.playLevelUp()
     }
 
     updateUI() {
