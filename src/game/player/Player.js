@@ -6,6 +6,7 @@ import {PlayerCombat} from "./PlayerCombat.js";
 import {PlayerHealth} from "./PlayerHealth.js";
 import {PlayerXP} from "./PlayerXP.js";
 import {PlayerSound} from "./PlayerSound.js";
+import {BackgroundMusic} from "./BackgroundMusic.js";
 
 export class Player {
 
@@ -24,12 +25,18 @@ export class Player {
         this.xp = new PlayerXP(this);
         this.sounds = new PlayerSound();
 
+        this.music = new BackgroundMusic();
+        this.music.play()
+
         this.createMesh()
     }
 
     update(dt) {
-        if (!dt || this.isPaused) return;
-
+        if (!dt || this.isPaused){
+            if (this.music.state) this.music.pause()
+            return;
+        }
+        if (!this.music.state) this.music.play()
         this.movement.update(dt);
         this.combat.update(dt);
         this.healthManager.update(dt);
