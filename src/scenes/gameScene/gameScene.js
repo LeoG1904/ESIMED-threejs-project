@@ -1,5 +1,5 @@
 import * as THREE from "three/webgpu";
-import { loadGltf } from "../tools.js";
+import { loadGltf } from "../../tools.js";
 
 import { LightManager } from "./lightManager.js";
 import { SkyboxManager } from "./skyboxManager.js";

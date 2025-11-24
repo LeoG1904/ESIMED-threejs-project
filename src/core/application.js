@@ -1,5 +1,5 @@
 import * as THREE from "three/webgpu";
-import { GameScene } from "../scenes/gameScene.js";
+import { GameScene } from "../scenes/gameScene/gameScene.js";
 import { Camera } from "./camera.js";
 import { Ui } from "./ui.js";
 import { Player } from "../game/player.js";

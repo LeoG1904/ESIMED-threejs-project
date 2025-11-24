@@ -1,5 +1,5 @@
 import * as THREE from "three/webgpu";
-import { textureloader } from "../tools.js";
+import { textureloader } from "../../tools.js";
 
 export class SkyboxManager {
     constructor(scene) {

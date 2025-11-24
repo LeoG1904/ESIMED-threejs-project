@@ -1,5 +1,5 @@
 import * as THREE from "three/webgpu";
-import { createStandardMaterial } from "../tools.js";
+import { createStandardMaterial } from "../../tools.js";
 
 export class GroundManager {
     constructor(scene, params) {
