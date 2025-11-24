@@ -19,17 +19,17 @@ export const UPGRADES = [
     {
         name: "Damage",
         base: 0.2,
-        apply: (player, mult) => player.projectileDamagePerc += 0.2 * mult
+        apply: (player, mult) => player.combat.projectileDamagePerc += 0.2 * mult
     },
     {
         name: "Jump Power",
         base: 0.2,
-        apply: (player, mult) => player.jumpPowerPerc += 0.2 * mult
+        apply: (player, mult) => player.movement.jumpPowerPerc += 0.2 * mult
     },
     {
         name: "Fire Rate",
         base: 0.25,
-        apply: (player, mult) => player.fireRatePerc += 0.25 * mult
+        apply: (player, mult) => player.combat.fireRatePerc += 0.25 * mult
     },
     {
         name: "Max Health",
@@ -49,26 +49,26 @@ export const UPGRADES = [
     {
         name: "Move Speed",
         base: 0.15,
-        apply: (player, mult) => player.speedPerc += 0.15 * mult
+        apply: (player, mult) => player.movement.speedPerc += 0.15 * mult
     },
     {
         name: "Freeze Chance",
         base: 5,
-        apply: (player, mult) => player.freezeChance += 5 * mult
+        apply: (player, mult) => player.combat.freezeChance += 5 * mult
     },
     {
         name: "Multi-shot",
         base: 1,
-        apply: (player, mult) => player.projectilesPerShot += Math.round(1 * mult)
+        apply: (player, mult) => player.combat.projectilesPerShot += Math.round(1 * mult)
     },
     {
         name: "Explosion Chance",
         base: 10,
-        apply: (player, mult) => player.deathExplosionChance += 10 * mult
+        apply: (player, mult) => player.combat.deathExplosionChance += 10 * mult
     },
     {
         name: "Explosion Size",
         base: 0.1,
-        apply: (player, mult) => player.explosionSizePerc += 0.1 * mult
+        apply: (player, mult) => player.combat.explosionSizePerc += 0.1 * mult
     }
 ];

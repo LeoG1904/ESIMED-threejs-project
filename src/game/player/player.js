@@ -120,6 +120,7 @@ export class Player {
     }
     die() {
         this.isDead = true
+        this.isPaused = true;
         const screen = document.getElementById("death-screen")
         const killsLabel = document.getElementById("death-kills")
         const timeLabel = document.getElementById("death-time")

@@ -84,9 +84,10 @@ export class Application {
     // RENDER LOOP
     // ============================================================
     render() {
-        if (this.player.isPaused) return;
 
         const dt = this.clock.getDelta();
+        if (this.player.isPaused) return;
+
 
         // ------------------------------
         // UI updates
