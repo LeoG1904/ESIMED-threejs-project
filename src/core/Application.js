@@ -66,6 +66,7 @@ export class Application {
         // Camera
         // ------------------------------
         this.camera = new Camera();
+        this.player.addCamera(this.camera.camera)
 
         // ------------------------------
         // Render loop

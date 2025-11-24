@@ -140,6 +140,22 @@ export class Ui{
         this.playerStats.explosionSizePerc = Number(player.combat.explosionSizePerc.toFixed(2));
     }
 
+    showFloatingText(text, position) {
+        const div = document.createElement("div");
+        div.className = "floating-text";
+        div.textContent = text;
+        document.body.appendChild(div);
+
+        div.style.left = position.x + "px";
+        div.style.top = position.y + "px";
+
+        setTimeout(() => {
+            div.style.opacity = 0;
+            div.style.transform = "translateY(-40px)";
+        }, 20);
+
+        setTimeout(() => div.remove(), 1000);
+    }
 
 
 }

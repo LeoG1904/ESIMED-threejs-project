@@ -1,13 +1,13 @@
 import * as THREE from "three";
 export class Enemy {
-    constructor(scene, player, position = new THREE.Vector3()) {
+    constructor(scene, player, position = new THREE.Vector3(), healthBoost) {
         this.scene = scene;
         this.player = player;
         this.baseSpeed = 2 + Math.random() * 2 // entre 2 et 4
         this.speed = this.baseSpeed
         this.globalSpeedBoost = 1
         this.damage = 10; // dégâts infligés au joueur
-        this.health = 50;
+        this.health = 50 * healthBoost;
 
         // Variation de taille aléatoire (0.8 à 1.2 fois la taille standard)
         const scale = 0.8 + Math.random() * 0.4;

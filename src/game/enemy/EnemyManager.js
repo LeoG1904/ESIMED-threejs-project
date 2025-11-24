@@ -12,6 +12,7 @@ export class EnemyManager {
 
         this.kills = 0; // compteur d'ennemis tués
         this.enemySpeedMultiplier = 1;
+        this.enemyHealthMultiplier = 1;
 
     }
 
@@ -26,6 +27,20 @@ export class EnemyManager {
 
         // Temps écoulé depuis le dernier spawn
         this.timeSinceLastSpawn += dt;
+
+        if (this.spawnInterval<-0.1){
+            this.enemyHealthMultiplier++
+            this.spawnInterval = 2
+            const screenPos = this.player.mesh.position.clone().project(this.player.camera);
+            this.player.ui.showFloatingText(
+                "Stage " + this.enemyHealthMultiplier,
+                {
+                    x: (screenPos.x * 0.5 + 0.5) * window.innerWidth,
+                    y: (-screenPos.y * 0.5 + 0.5) * window.innerHeight
+                }
+            );
+
+        }
 
         if (this.timeSinceLastSpawn >= Math.max(this.spawnInterval , minInterval)) {
             this.spawnEnemy();
@@ -46,7 +61,7 @@ export class EnemyManager {
         const x = this.player.mesh.position.x + Math.cos(angle) * radius;
         const z = this.player.mesh.position.z + Math.sin(angle) * radius;
 
-        const enemy = new Enemy(this.scene, this.player, new THREE.Vector3(x, 0, z));
+        const enemy = new Enemy(this.scene, this.player, new THREE.Vector3(x, 0, z), this.enemyHealthMultiplier);
         this.enemies.push(enemy);
     }
 }

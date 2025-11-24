@@ -87,5 +87,8 @@ export class Player {
             flash.style.opacity = 0;
         }, 100); // flash 0.1s
     }
+    addCamera(camera){
+        this.camera = camera
+    }
 
 }
