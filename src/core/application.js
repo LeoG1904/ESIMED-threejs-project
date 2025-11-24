@@ -2,8 +2,8 @@ import * as THREE from "three/webgpu";
 import { GameScene } from "../scenes/gameScene/gameScene.js";
 import { Camera } from "./camera.js";
 import { Ui } from "./ui.js";
-import { Player } from "../game/player.js";
-import { EnemyManager } from "../game/enemyManager.js";
+import { Player } from "../game/player/player.js";
+import { EnemyManager } from "../game/enemy/enemyManager.js";
 
 // DOM
 const deathScreen = document.getElementById("death-screen");

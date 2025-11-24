@@ -87,69 +87,55 @@ export class Ui{
 
 
     addPlayerStats(player) {
+        // On sépare clairement les stats Movement et Combat
         this.playerStats = {
+            // Movement
+            speedPerc: player.movement.speedPerc,
+            jumpPowerPerc: player.movement.jumpPowerPerc,
+
+            // Combat
             maxHealth: player.maxHealth,
             autoHealth: player.autoHealth,
             projectileDamagePerc: player.projectileDamagePerc,
-            speedPerc: player.speedPerc,
             fireRatePerc: player.fireRatePerc,
             freezeChance: player.freezeChance,
             deathExplosionChance: player.deathExplosionChance,
-            explosionSizePerc: player.explosionSizePerc,
-            jumpPowerPerc: player.jumpPowerPerc
+            explosionSizePerc: player.explosionSizePerc
         };
 
         this.playerFolder = this.GUI.addFolder("Player Stats");
 
-        this.playerFolder.add(this.playerStats, "maxHealth")
-            .name("Max Health")
-            .listen();
+        // --- Movement Stats ---
+        this.playerFolder.add(this.playerStats, "speedPerc").name("Move Speed").listen();
+        this.playerFolder.add(this.playerStats, "jumpPowerPerc").name("Jump Power").listen();
 
-        this.playerFolder.add(this.playerStats, "autoHealth")
-            .name("Health per sec")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "jumpPowerPerc")
-            .name("Jump power")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "projectileDamagePerc")
-            .name("Damage per bullet")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "speedPerc")
-            .name("Move Speed")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "fireRatePerc")
-            .name("Fire Rate")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "freezeChance")
-            .name("Freeze chance")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "deathExplosionChance")
-            .name("Explosion chance")
-            .listen();
-
-        this.playerFolder.add(this.playerStats, "explosionSizePerc")
-            .name("Explosion size")
-            .listen();
+        // --- Combat Stats ---
+        this.playerFolder.add(this.playerStats, "maxHealth").name("Max Health").listen();
+        this.playerFolder.add(this.playerStats, "autoHealth").name("Health per sec").listen();
+        this.playerFolder.add(this.playerStats, "projectileDamagePerc").name("Damage per bullet").listen();
+        this.playerFolder.add(this.playerStats, "fireRatePerc").name("Fire Rate").listen();
+        this.playerFolder.add(this.playerStats, "freezeChance").name("Freeze Chance").listen();
+        this.playerFolder.add(this.playerStats, "deathExplosionChance").name("Explosion Chance").listen();
+        this.playerFolder.add(this.playerStats, "explosionSizePerc").name("Explosion Size").listen();
 
         this.playerFolder.open();
     }
+
     updatePlayerStats(player) {
+        // --- Movement Stats ---
+        this.playerStats.speedPerc = Number(player.movement.speedPerc.toFixed(2));
+        this.playerStats.jumpPowerPerc = Number(player.movement.jumpPowerPerc.toFixed(2));
+
+        // --- Combat Stats ---
         this.playerStats.maxHealth = player.maxHealth;
         this.playerStats.autoHealth = player.autoHealth;
-        this.playerStats.projectileDamagePerc = Number((player.projectileDamagePerc / player.projectilesPerShot).toFixed(2) );
-        this.playerStats.speedPerc = Number(player.speedPerc.toFixed(2));
+        this.playerStats.projectileDamagePerc = Number((player.projectileDamagePerc / player.projectilesPerShot).toFixed(2));
         this.playerStats.fireRatePerc = Number(player.fireRatePerc.toFixed(3));
         this.playerStats.freezeChance = Number(player.freezeChance.toFixed(2));
-        this.playerStats.deathExplosionChance = Number(player.deathExplosionChance.toFixed(2))
-        this.playerStats.explosionSizePerc = Number(player.explosionSizePerc.toFixed(2))
-        this.playerStats.jumpPowerPerc = Number(player.jumpPowerPerc.toFixed(2))
+        this.playerStats.deathExplosionChance = Number(player.deathExplosionChance.toFixed(2));
+        this.playerStats.explosionSizePerc = Number(player.explosionSizePerc.toFixed(2));
     }
+
 
 
 }

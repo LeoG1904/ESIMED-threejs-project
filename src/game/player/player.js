@@ -1,6 +1,7 @@
 import * as THREE from "three"
-import {getRandomRarity, RARITIES, UPGRADES} from "./upgrade.js"
-import {addScore} from "./leaderBoard.js";
+import {getRandomRarity, RARITIES, UPGRADES} from "../upgrade.js"
+import {addScore} from "../leaderBoard.js";
+import {PlayerMovement} from "./PlayerMovement.js";
 
 export class Player {
 
@@ -13,17 +14,8 @@ export class Player {
         this.enemyManager = enemyManager
         this.ui = ui
 
-        // Mouvement
-        this.speed = 6
-        this.speedPerc = 1
-        this.direction = { forward: false, backward: false, left: false, right: false }
+        this.movement = new PlayerMovement(this);
 
-        // Saut & gravité
-        this.velocityY = 0
-        this.gravity = -20
-        this.jumpPower = 8
-        this.jumpPowerPerc = 1
-        this.isGrounded = true
 
         // Vie
         this.maxHealth = 100
@@ -53,7 +45,6 @@ export class Player {
 
 
         this.createMesh()
-        this.initControls()
     }
 
     updateExpBar() {
@@ -105,54 +96,11 @@ export class Player {
         this.scene.add(this.mesh);
     }
 
-    initControls() {
-        window.addEventListener("keydown", e => this.handleKey(e, true));
-        window.addEventListener("keyup", e => this.handleKey(e, false));
-    }
-
-    handleKey(e, isDown) {
-        switch (e.key.toLowerCase()) {
-            case "z":
-            case "w": this.direction.forward = isDown; break;
-            case "s": this.direction.backward = isDown; break;
-            case "q":
-            case "a": this.direction.left = isDown; break;
-            case "d": this.direction.right = isDown; break;
-            case " ":
-                if (isDown && this.isGrounded) {
-                    this.velocityY = this.jumpPower * this.jumpPowerPerc;
-                    this.isGrounded = false;
-                }
-                break;
-            case "escape":
-                if (isDown && !this.isLevelUp) {
-                    this.isPaused = !this.isPaused
-                    document.getElementById("pause-screen").style.display =
-                        this.isPaused ? "flex" : "none";
-                }
-                break
-        }
-    }
-
     update(dt) {
         if (!dt) return;
-        const move = this.speed * dt * this.speedPerc;
 
-        // Déplacement horizontal
-        if (this.direction.forward) this.mesh.position.z -= move;
-        if (this.direction.backward) this.mesh.position.z += move;
-        if (this.direction.left) this.mesh.position.x -= move;
-        if (this.direction.right) this.mesh.position.x += move;
-
-        // Gravité & saut
-        this.velocityY += this.gravity * dt;
-        this.mesh.position.y += this.velocityY * dt;
-
-        if (this.mesh.position.y <= 0.5) {
-            this.mesh.position.y = 0.5;
-            this.velocityY = 0;
-            this.isGrounded = true;
-        }
+        // Déplacement géré par PlayerMovement
+        this.movement.update(dt);
 
         // Tir automatique
         this.timeSinceLastShot += dt;
@@ -282,7 +230,6 @@ export class Player {
         // disparition rapide
         setTimeout(() => this.scene.remove(explosion), 300);
     }
-
 
     updateHealthBar() {
         const bar = document.getElementById("health-bar");
