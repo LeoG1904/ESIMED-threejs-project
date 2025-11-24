@@ -15,7 +15,10 @@ export function loadLeaderboard() {
 export function saveLeaderboard(scores) {
     localStorage.setItem("cc_leaderboard", JSON.stringify(scores));
 }
-
+document.getElementById("reset-leaderboard-btn").addEventListener("click", () => {
+    localStorage.removeItem("cc_leaderboard"); // la bonne clé !
+    document.getElementById("leaderboard-list").innerHTML = "<li>No scores yet</li>";
+});
 export function addScore(name, kills, time) {
     const scores = loadLeaderboard();
 
