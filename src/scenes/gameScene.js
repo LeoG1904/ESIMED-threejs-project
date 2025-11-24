@@ -1,7 +1,7 @@
 import * as THREE from "three/webgpu";
 import {createStandardMaterial, loadGltf, textureloader} from "../tools.js";
 
-export class Scene{
+export class GameScene {
 
     constructor() {
         this.scene = new THREE.Scene()

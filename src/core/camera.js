@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import {OrbitCtl} from "./orbitControls.js";
 
 export class Camera{
 
@@ -12,7 +11,4 @@ export class Camera{
         this.camera.position.set(2,2,5)
     }
 
-    setOrbitControls(domElement){
-        this.orbitControls = new OrbitCtl(this.camera,domElement)
-    }
 }

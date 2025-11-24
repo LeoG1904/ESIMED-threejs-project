@@ -1,10 +1,10 @@
 import * as THREE from 'three/webgpu'
-import {Scene} from "./class/scene.js";
-import {Camera} from "./class/camera.js";
-import {Ui} from "./class/ui.js";
-import {Player} from "./class/player.js";
-import {Enemy} from "./class/enemy.js";
-import {EnemyManager} from "./class/enemyManager.js";
+import {GameScene} from "../scenes/gameScene.js";
+import {Camera} from "./camera.js";
+import {Ui} from "./ui.js";
+import {Player} from "../game/player.js";
+import {Enemy} from "../game/enemy.js";
+import {EnemyManager} from "../game/enemyManager.js";
 
 const deathScreen = document.getElementById("death-screen")
 const homePage = document.getElementById("homepage")
@@ -40,7 +40,7 @@ export class Application {
         this.UI.addSessionTimer()
         this.UI.addEnemy()
 
-        this.scene = new Scene()
+        this.scene = new GameScene()
         // this.scene.addCube()
         // this.scene.loadScene('/scenes/scene_1.json')
         this.scene.addAmbiantLight()
@@ -59,7 +59,6 @@ export class Application {
         this.UI.addPlayerStats(this.player)
 
         this.camera = new Camera()
-        this.camera.setOrbitControls(this.renderer.domElement)
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
