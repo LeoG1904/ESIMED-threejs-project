@@ -1,154 +1,164 @@
-import * as THREE from 'three/webgpu'
-import {GameScene} from "../scenes/gameScene.js";
-import {Camera} from "./camera.js";
-import {Ui} from "./ui.js";
-import {Player} from "../game/player.js";
-import {Enemy} from "../game/enemy.js";
-import {EnemyManager} from "../game/enemyManager.js";
+import * as THREE from "three/webgpu";
+import { GameScene } from "../scenes/gameScene.js";
+import { Camera } from "./camera.js";
+import { Ui } from "./ui.js";
+import { Player } from "../game/player.js";
+import { EnemyManager } from "../game/enemyManager.js";
 
-const deathScreen = document.getElementById("death-screen")
-const homePage = document.getElementById("homepage")
+// DOM
+const deathScreen = document.getElementById("death-screen");
+const homePage = document.getElementById("homepage");
 
 export class Application {
-    
     constructor() {
-        this.renderer = new THREE.WebGPURenderer({antialias: true})
-        this.renderer.setSize(window.innerWidth, window.innerHeight)
-        this.renderer.shadowMap.enabled = true
-        document.body.appendChild(this.renderer.domElement)
 
+        // ------------------------------
+        // Renderer
+        // ------------------------------
+        this.renderer = new THREE.WebGPURenderer({ antialias: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.shadowMap.enabled = true;
+        document.body.appendChild(this.renderer.domElement);
+
+        // ------------------------------
+        // UI buttons
+        // ------------------------------
         document.getElementById("restart-btn").addEventListener("click", () => {
             location.reload();
         });
 
-
-        const menuBtns = document.querySelectorAll(".menu-btn");
-        menuBtns.forEach(btn => {
+        document.querySelectorAll(".menu-btn").forEach(btn => {
             btn.addEventListener("click", () => {
-                homePage.style.display = 'bloc';
+                homePage.style.display = "block";
                 location.reload();
             });
         });
 
+        // ------------------------------
+        // Time
+        // ------------------------------
+        this.clock = new THREE.Clock();
+        this.startTime = Date.now();
 
-        this.clock = new THREE.Clock(); // <-- pour le delta
-        this.startTime = Date.now(); // au début de la partie
+        // ------------------------------
+        // Params loading (ground/skybox)
+        // ------------------------------
+        this.initParams();
 
-        this.initParams()
+        // ------------------------------
+        // Interface
+        // ------------------------------
+        this.UI = new Ui();
+        this.UI.addSessionTimer();
+        this.UI.addEnemy();
 
-        this.UI = new Ui()
-        this.UI.addSessionTimer()
-        this.UI.addEnemy()
+        // ------------------------------
+        // Scene (auto-build via params)
+        // ------------------------------
+        this.scene = new GameScene(this.exportParams);
 
-        this.scene = new GameScene()
-        // this.scene.addCube()
-        // this.scene.loadScene('/scenes/scene_1.json')
-        this.scene.addAmbiantLight()
-        this.scene.addDirectionalLight()
-        this.scene.addGround(this.groundParams.texture,this.groundParams.repeats)
-        this.scene.addSkybox(this.skyParams.file)
+        // ------------------------------
+        // Game Logic
+        // ------------------------------
+        this.enemyManager = new EnemyManager(this.scene.scene, null);
+        this.player = new Player(this.scene.scene, this.enemyManager, this.UI);
 
-
-        this.enemyManager = new EnemyManager(this.scene.scene, null); // temporairement null pour player
-        this.player = new Player(this.scene.scene, this.enemyManager,this.UI);
-        this.player.isDead = false
+        this.player.isDead = false;
         this.enemyManager.player = this.player;
 
+        this.UI.addLevel(this.player);
+        this.UI.addPlayerStats(this.player);
 
-        this.UI.addLevel(this.player)
-        this.UI.addPlayerStats(this.player)
+        // ------------------------------
+        // Camera
+        // ------------------------------
+        this.camera = new Camera();
 
-        this.camera = new Camera()
-
-        this.renderer.setAnimationLoop(this.render.bind(this))
+        // ------------------------------
+        // Render loop
+        // ------------------------------
+        this.renderer.setAnimationLoop(this.render.bind(this));
     }
 
+    // ============================================================
+    // RENDER LOOP
+    // ============================================================
     render() {
-        if (this.player.isPaused){
-            const dt = this.clock.getDelta() // <-- calcul du delta
-            return
+        if (this.player.isPaused) return;
+
+        const dt = this.clock.getDelta();
+
+        // ------------------------------
+        // UI updates
+        // ------------------------------
+        this.UI.updateKills(this.enemyManager.kills);
+        this.UI.updateAliveEnemies(this.enemyManager.enemies.length);
+        this.UI.updateLevel(this.player);
+        this.UI.updatePlayerStats(this.player);
+        this.UI.updateEnemySpeed(this.enemyManager.enemySpeedMultiplier.toFixed(2));
+
+        // Session Timer
+        if (deathScreen.style.display !== "flex") {
+            const elapsed = (Date.now() - this.startTime) / 1000;
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = Math.floor(elapsed % 60);
+            this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, "0")}`;
         }
 
-        this.UI.updateKills(this.enemyManager.kills)
-        this.UI.updateAliveEnemies(this.enemyManager.enemies.length)
-        this.UI.updateLevel(this.player)
-        this.UI.updatePlayerStats(this.player)
-        this.UI.updateEnemySpeed(this.enemyManager.enemySpeedMultiplier.toFixed(2))
-
-        const now = Date.now();
-        const elapsed = (now - this.startTime) / 1000; // en secondes
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = Math.floor(elapsed % 60);
-
-        if (deathScreen.style.display !== "flex"){
-            this.UI.timerData.time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-        }
-
-
-        const dt = this.clock.getDelta() // <-- calcul du delta
-        this.player.update(dt)
-        this.player.updateHealthBar();  // mettre à jour la barre de vie
-
+        // ------------------------------
+        // Game updates
+        // ------------------------------
+        this.player.update(dt);
+        this.player.updateHealthBar();
         this.enemyManager.update(dt);
 
-        // Exemple simple : faire suivre la caméra derrière le joueur
-        this.camera.camera.position.lerp(
-            new THREE.Vector3(
-                this.player.mesh.position.x,
-                this.player.mesh.position.y + 10,
-                this.player.mesh.position.z + 15
-            ),
-            0.1
-        )
-        this.camera.camera.lookAt(this.player.mesh.position)
+        // ------------------------------
+        // Camera follow
+        // ------------------------------
+        const targetPos = new THREE.Vector3(
+            this.player.mesh.position.x,
+            this.player.mesh.position.y + 10,
+            this.player.mesh.position.z + 15
+        );
 
+        this.camera.camera.position.lerp(targetPos, 0.1);
+        this.camera.camera.lookAt(this.player.mesh.position);
 
-        this.renderer.render(this.scene.scene, this.camera.camera)
+        // ------------------------------
+        // Render scene
+        // ------------------------------
+        this.renderer.render(this.scene.scene, this.camera.camera);
     }
 
-    initParams(){
-        this.groundTextures = [
-            'aerial_grass_rock',
-            'brown_mud_leaves_01',
-            'forest_floor',
-            'forrest_ground_01',
-            'gravelly_sand'
-        ]
+    // ============================================================
+    // PARAMS (ground / skybox / sun)
+    // ============================================================
+    initParams() {
 
-        this.groundParams = {
-            texture: this.groundTextures[3],
-            repeats: 1000
-        }
+        this.groundTextures = [
+            "aerial_grass_rock",
+            "brown_mud_leaves_01",
+            "forest_floor",
+            "forrest_ground_01",
+            "gravelly_sand"
+        ];
 
         this.skyboxFiles = [
-            'DaySkyHDRI019A_2K-TONEMAPPED',
-            'DaySkyHDRI050A_2K-TONEMAPPED',
-            'NightSkyHDRI009_2K-TONEMAPPED'
-        ]
+            "DaySkyHDRI019A_2K-TONEMAPPED",
+            "DaySkyHDRI050A_2K-TONEMAPPED",
+            "NightSkyHDRI009_2K-TONEMAPPED"
+        ];
 
-        this.skyParams = {
-            file: this.skyboxFiles[2]
-        }
-
-        this.sunParams = {
-            intensity: 2.0,
-            x: 3,
-            z: 0,
-            color: "#ffffff"
-        };
-
-        // Créer les paramètres globaux à exporter
+        // Defaults
         this.exportParams = {
             ground: {
-                texture: this.groundParams.texture,
-                repeats: this.groundParams.repeats
+                texture: this.groundTextures[3],
+                repeats: 1000
             },
             skybox: {
-                file: this.skyParams.file
-            }
+                file: this.skyboxFiles[2]
+            },
+            // prêt à ajouter sun ici
         };
-
     }
-
 }

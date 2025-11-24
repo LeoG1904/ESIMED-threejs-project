@@ -3,13 +3,19 @@ import {createStandardMaterial, loadGltf, textureloader} from "../tools.js";
 
 export class GameScene {
 
-    constructor() {
-        this.scene = new THREE.Scene()
-        this.loadedModels = {}
-        this.sun = null
+    constructor(params) {
+        this.scene = new THREE.Scene();
+        this.params = params;
 
+        this.loadedModels = {};
+        this.sun = null;
 
+        this.addAmbiantLight();
+        this.addDirectionalLight();
+        this.addGround(params.ground.texture, params.ground.repeats);
+        this.addSkybox(params.skybox.file);
     }
+
 
     addCube(){
         const geometry = new THREE.BoxGeometry( 1, 1, 1 );

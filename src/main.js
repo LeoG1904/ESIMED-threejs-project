@@ -1,6 +1,6 @@
 import './style.css';
 import { Application } from './core/application.js';
-import './scenes/homeBackground.js';
+import './scenes/homeScene.js';
 import "./game/leaderBoard.js";
 
 const startBtn = document.getElementById('start-btn');
