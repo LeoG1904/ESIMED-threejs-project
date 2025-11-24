@@ -37,6 +37,13 @@ export class PlayerMovement {
                     this.isGrounded = false;
                 }
                 break;
+            case "escape":
+                if (isDown && !this.isLevelUp) {
+                    this.player.isPaused = !this.player.isPaused
+                    document.getElementById("pause-screen").style.display =
+                        this.player.isPaused ? "flex" : "none";
+                }
+                break
         }
     }
 
