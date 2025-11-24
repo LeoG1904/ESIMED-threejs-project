@@ -1,6 +1,6 @@
 import * as THREE from "three"
-import {getRandomRarity, RARITIES, UPGRADES} from "../upgrade.js"
-import {addScore} from "../leaderBoard.js";
+import {getRandomRarity, RARITIES, UPGRADES} from "../Upgrade.js"
+import {addScore} from "../LeaderBoard.js";
 import {PlayerMovement} from "./PlayerMovement.js";
 import {PlayerCombat} from "./PlayerCombat.js";
 

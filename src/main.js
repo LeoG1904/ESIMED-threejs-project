@@ -1,7 +1,7 @@
 import './style.css';
-import { Application } from './core/application.js';
+import { Application } from './core/Application.js';
 
-import "./game/leaderBoard.js";
+import "./game/LeaderBoard.js";
 import HomeScene from "./scenes/homeScene.js";
 
 const startBtn = document.getElementById('start-btn');

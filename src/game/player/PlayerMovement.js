@@ -38,7 +38,7 @@ export class PlayerMovement {
                 }
                 break;
             case "escape":
-                if (isDown && !this.isLevelUp) {
+                if (isDown) {
                     this.player.isPaused = !this.player.isPaused
                     document.getElementById("pause-screen").style.display =
                         this.player.isPaused ? "flex" : "none";

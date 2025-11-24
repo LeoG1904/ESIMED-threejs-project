@@ -1,11 +1,11 @@
 import * as THREE from "three/webgpu";
 import { loadGltf } from "../../tools.js";
 
-import { LightManager } from "./lightManager.js";
-import { SkyboxManager } from "./skyboxManager.js";
-import { GroundManager } from "./groundManager.js";
-import { SceneExporter } from "./sceneExporter.js";
-import { SceneImporter } from "./sceneImporter.js";
+import { LightManager } from "./LightManager.js";
+import { SkyboxManager } from "./SkyboxManager.js";
+import { GroundManager } from "./GroundManager.js";
+import { SceneExporter } from "./SceneExporter.js";
+import { SceneImporter } from "./SceneImporter.js";
 
 export class GameScene {
     constructor(params) {
