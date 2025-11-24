@@ -36,15 +36,15 @@ export const UPGRADES = [
         base: 20,
         apply: (player, mult) => {
             const bonus = 20 * mult;
-            player.maxHealth += bonus;
-            player.health += bonus;
-            player.updateHealthBar();
+            player.healthManager.maxHealth += bonus;
+            player.healthManager.health += bonus;
+            player.healthManager.updateUI();
         }
     },
     {
         name: "Auto Health",
         base: 0.25,
-        apply: (player, mult) => player.autoHealth += 0.1 * mult
+        apply: (player, mult) => player.healthManager.autoHealth += 0.1 * mult
     },
     {
         name: "Move Speed",

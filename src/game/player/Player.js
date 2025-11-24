@@ -3,6 +3,8 @@ import {getRandomRarity, RARITIES, UPGRADES} from "../Upgrade.js"
 import {addScore} from "../LeaderBoard.js";
 import {PlayerMovement} from "./PlayerMovement.js";
 import {PlayerCombat} from "./PlayerCombat.js";
+import {PlayerHealth} from "./PlayerHealth.js";
+import {PlayerXP} from "./PlayerXP.js";
 
 export class Player {
 
@@ -17,64 +19,22 @@ export class Player {
 
         this.movement = new PlayerMovement(this);
         this.combat = new PlayerCombat(this);
-
-
-        // Vie
-        this.maxHealth = 100
-        this.health = this.maxHealth
-        this.autoHealth = 0
-
-        // EXP / Level
-        this.level = 1;
-        this.exp = 0;
-        this.expToNextLevel = 50   // exp nécessaire pour passer au niveau suivant
-
+        this.healthManager = new PlayerHealth(this);
+        this.xp = new PlayerXP(this);
 
         this.createMesh()
     }
 
-    updateExpBar() {
-        const bar = document.getElementById("exp-bar")
-        if (!bar) return
-        const percent = (this.exp / this.expToNextLevel) * 100
-        bar.style.width = percent + "%"
-    }
-    gainExp(amount) {
-        this.exp += amount
-        if (this.exp >= this.expToNextLevel) {
-            this.levelUp()
-        }
-        this.updateExpBar()
+    update(dt) {
+        if (!dt || this.isPaused) return;
+
+        this.movement.update(dt);
+        this.combat.update(dt);
+        this.healthManager.update(dt);
+        this.healthManager.updateUI();
+        this.xp.updateUI();
     }
 
-
-
-    levelUp() {
-        this.isLevelUp = true
-        this.isPaused = true;
-
-        this.movement.resetDirection();
-
-        this.level++;
-        this.exp -= this.expToNextLevel;
-        this.expToNextLevel = Math.floor(this.expToNextLevel * 1.05); // croissance exp
-
-        // Prendre 3 upgrades au hasard
-
-        const choices = [...UPGRADES]
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 3)
-            .map(up => {
-                return { ...up, rarity:getRandomRarity() };
-            });
-
-        // Demander à l’UI d’afficher le popup
-        this.ui.showUpgradesPopup(choices, (upgrade) => {
-            upgrade.apply(this, upgrade.rarity.multiplier);   // appliquer l'amélioration
-            this.isPaused = false
-            this.isLevelUp = false
-        });
-    }
     createMesh() {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshPhongMaterial({ color: 0x00ffcc, flatShading: true });
@@ -85,39 +45,6 @@ export class Player {
         this.scene.add(this.mesh);
     }
 
-    update(dt) {
-        if (!dt || this.isPaused) return;
-
-        // Déplacement géré par PlayerMovement
-        this.movement.update(dt);
-
-        // Gestion du combat
-        this.combat.update(dt);
-
-        this.health += this.autoHealth * dt
-        if (this.health>this.maxHealth) this.health = this.maxHealth
-
-        // Mettre à jour la barre de vie
-        this.updateHealthBar();
-        if (this.health <= 1 && !this.isDead) {
-            this.health = 0;
-            this.updateHealthBar();
-            this.die();
-        }
-
-    }
-
-
-    updateHealthBar() {
-        const bar = document.getElementById("health-bar");
-        if (!bar) return;
-        const percent = (this.health / this.maxHealth) * 100;
-        bar.style.width = percent + "%";
-
-        if (percent > 50) bar.style.backgroundColor = "#0f0";
-        else if (percent > 20) bar.style.backgroundColor = "#ff0";
-        else bar.style.backgroundColor = "#f00";
-    }
     die() {
         this.isDead = true
         this.isPaused = true;

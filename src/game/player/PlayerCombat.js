@@ -87,7 +87,7 @@ export class PlayerCombat {
                         this.player.scene.remove(enemy.mesh);
                         enemies.splice(j, 1);
                         this.player.enemyManager.kills++;
-                        this.player.gainExp(10);
+                        this.player.xp.gainExp(10);
 
                         if (Math.random() * 100 < this.deathExplosionChance) {
                             this.createExplosion(enemy.mesh.position);

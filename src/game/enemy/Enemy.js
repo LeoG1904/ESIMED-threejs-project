@@ -56,9 +56,8 @@ export class Enemy {
         if (distance < collisionDistance) {
             // Appliquer les dégâts et éviter double collision instantanée
             if (!this.hasHit) {
-                this.player.health -= this.damage;
-                if (this.player.health < 0) this.player.health = 0;
-                this.player.updateHealthBar();
+                this.player.healthManager.takeDamage(this.damage)
+                this.player.healthManager.updateUI();
                 this.hasHit = true;
 
                 // On peut repousser légèrement l'ennemi pour éviter plusieurs hits instantanés

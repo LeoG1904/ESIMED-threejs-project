@@ -33,14 +33,14 @@ export class Ui{
     }
 
     addLevel(player) {
-        this.levelData = { level: player.level }; // initialisé avec le niveau du joueur
+        this.levelData = { level: player.xp.level }; // initialisé avec le niveau du joueur
         this.levelFolder = this.GUI.addFolder("Player Level");
         this.levelField = this.levelFolder.add(this.levelData, "level").name("Level").listen();
         this.levelFolder.open();
     }
 
     updateLevel(player) {
-        this.levelData.level = player.level;
+        this.levelData.level = player.xp.level;
     }
 
     showUpgradesPopup(upgrades, onSelect) {
@@ -99,8 +99,8 @@ export class Ui{
             explosionSizePerc: player.combat.explosionSizePerc,
 
             // Life
-            maxHealth: player.maxHealth,
-            autoHealth: player.autoHealth
+            maxHealth: player.healthManager.maxHealth,
+            autoHealth: player.healthManager.autoHealth
         };
 
         this.playerFolder = this.GUI.addFolder("Player Stats");
@@ -129,8 +129,8 @@ export class Ui{
         this.playerStats.jumpPowerPerc = Number(player.movement.jumpPowerPerc.toFixed(2));
 
         // --- Life Stats ---
-        this.playerStats.maxHealth = player.maxHealth;
-        this.playerStats.autoHealth = player.autoHealth;
+        this.playerStats.maxHealth = player.healthManager.maxHealth;
+        this.playerStats.autoHealth = player.healthManager.autoHealth;
 
         // --- Combat Stats ---
         this.playerStats.projectileDamagePerc = Number((player.combat.projectileDamagePerc / player.combat.projectilesPerShot).toFixed(2));

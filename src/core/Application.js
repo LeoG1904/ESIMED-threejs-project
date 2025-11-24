@@ -110,7 +110,7 @@ export class Application {
         // Game updates
         // ------------------------------
         this.player.update(dt);
-        this.player.updateHealthBar();
+        this.player.healthManager.updateUI();
         this.enemyManager.update(dt);
 
         // ------------------------------
